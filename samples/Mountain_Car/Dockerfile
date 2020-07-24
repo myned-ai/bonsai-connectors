@@ -19,8 +19,11 @@ RUN pip3 install -U setuptools \
 WORKDIR /sim
 
 # Copy simulator files to /sim
-COPY samples/Pendulum /sim
+COPY samples/Pendulum/gym.py \
+     samples/Pendulum/simulator_interface.json \
+     simulator \
+     sim/
 
 
 # This will be the command to run the simulator
-CMD ["python", "bonsai3_gym_pendulum.py", "--verbose"]
+CMD ["python", "gym.py", "--verbose"]

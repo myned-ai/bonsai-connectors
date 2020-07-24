@@ -13,23 +13,23 @@ class PendulumModel(GymSimulator):
     # Environment name, from openai-gym
     environment_name = 'Pendulum-v0'
 
-    def __init__(self, config,sim_model, iteration_limit=200, skip_frame=1):
-        log.set_enabled("debug",True)        
-        #send this class instance to the sim_model
+    def __init__(self, config, sim_model, iteration_limit=200, skip_frame=1):
+        log.set_enabled("debug", True)
+        # send this class instance to the sim_model
         sim_model.attach(self)
 
         self.bonsai_state = {"cos_theta": 0.0,
-                       "sin_theta": 0.0,
-                       "angular_velocity": 0.0}
+                             "sin_theta": 0.0,
+                             "angular_velocity": 0.0}
 
-        super().__init__(config,sim_model,iteration_limit, skip_frame)
+        super().__init__(config, sim_model, iteration_limit, skip_frame)
 
-   
     # convert openai gym observation to our state type
+
     def gym_to_state(self, observation):
         self.bonsai_state = {"cos_theta": observation[0],
-                       "sin_theta": observation[1],
-                       "angular_velocity": observation[2]}
+                             "sin_theta": observation[1],
+                             "angular_velocity": observation[2]}
 
         return self.bonsai_state
 
@@ -49,22 +49,25 @@ class PendulumModel(GymSimulator):
         """
         super().gym_episode_start(config)
 
-        initial_theta = config.get("initial_theta", self._env.unwrapped.state[0])
-        initial_angular_velocity = config.get("initial_angular_velocity", self._env.unwrapped.state[1])
+        initial_theta = config.get(
+            "initial_theta", self._env.unwrapped.state[0])
+        initial_angular_velocity = config.get(
+            "initial_angular_velocity", self._env.unwrapped.state[1])
 
-        #set the environment state
-        self._env.unwrapped.state = np.array([initial_theta, initial_angular_velocity])
+        # set the environment state
+        self._env.unwrapped.state = np.array(
+            [initial_theta, initial_angular_velocity])
 
-        #set the bonsai state
+        # set the bonsai state
         self.bonsai_state = {"cos_theta": np.cos(initial_theta),
-                       "sin_theta": np.sin(initial_theta),
-                       "angular_velocity": initial_angular_velocity}
-   
-        #return the initial observation
+                             "sin_theta": np.sin(initial_theta),
+                             "angular_velocity": initial_angular_velocity}
+
+        # return the initial observation
         return np.array([np.cos(initial_theta), np.sin(initial_theta), initial_angular_velocity])
 
-
     # Callbacks
+
     def get_state(self):
         log.debug('get_state: {}'.format(self.state()))
         return self.state()

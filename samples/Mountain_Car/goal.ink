@@ -38,7 +38,7 @@ graph (input: SimState): SimAction {
                 reach `car position`:
                     State.position in Goal.RangeAbove(0.5)   
                 maximize `speed`:
-                    Math.Abs(State.speed) in Goal.Range(-0.07, 0.07)       
+                    State.speed in Goal.Range(0, 0.07)       
             }
 
             training {
