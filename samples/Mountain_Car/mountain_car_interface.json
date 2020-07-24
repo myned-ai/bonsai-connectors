@@ -1,0 +1,60 @@
+{
+  "name": "mountain_car_simulator",
+  "timeout": 60,
+  "description": {
+    "config": {
+      "category": "Struct",
+      "fields": [
+        {
+          "name": "initial_position",
+          "type": {
+            "category": "Number",
+            "defaultValue": 0
+          }
+        },
+        {
+          "name": "initial_speed",
+          "type": {
+            "category": "Number",
+            "defaultValue": 0
+          }
+        },
+        {
+          "name": "iteration_limit",
+          "type": {
+            "category": "Number",
+            "defaultValue": 0
+          }
+        }
+      ]
+    },
+    "action": {
+      "category": "Struct",
+      "fields": [
+        {
+          "name": "command",
+          "type": {
+            "category": "Number"
+          }
+        }
+      ]
+    },
+    "state": {
+      "category": "Struct",
+      "fields": [
+        {
+          "name": "position",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "speed",
+          "type": {
+            "category": "Number"
+          }
+        }
+      ]
+    }
+  }
+}
