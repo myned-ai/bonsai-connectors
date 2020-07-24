@@ -2,9 +2,9 @@ import sys
 import os
 import numpy as np
 from bonsai3 import ServiceConfig, SimulatorInterface, Schema
-from bonsai3_gym import GymSimulator
+from gym_simulator import GymSimulator
 from bonsai3.logger import Logger
-
+from sim_model import SimModel
 
 log = Logger()
 
