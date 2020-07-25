@@ -6,10 +6,10 @@ log = logging.getLogger(__name__)
 log.debug('Running setup...')
 
 version = {}
-with open("version.py") as fp:
+with open("./gymsimulator/version.py") as fp:
     exec(fp.read(), version)
 setup(
-    name="simulator",
+    name="gymsimulator",
     version=version['__version__'],
     description="Simulator interface library",
     long_description="test",
@@ -26,7 +26,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Natural Language :: English'
     ],
-    keywords="simulator",
+    keywords="gymsimulator",
     install_requires=[
         'wheel>=0.31.0',
         'requests>=2.18',
