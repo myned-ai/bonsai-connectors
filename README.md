@@ -1,9 +1,21 @@
-# bonsai-gym
+# Bonsai Gym
 
-OpenAI Gym is a toolkit for developing and comparing reinforcement learning algorithms. 
-https://github.com/openai
+Bonsai Gym is an open-source interface library, which gives you access to OpenAI Gym standardized set of environments using Microsoft Bonsai.
 
-Full documentation for Bonsai's Platform can be found at https://docs.bons.ai. The bonsai-ai documentation specifically can be found in Bonsai's Python Library Reference.
+## Basics
+
+There are two basic concepts in reinforcement learning: the environment (namely, the outside world) and the agent (namely, the algorithm you are writing). The agent sends actions to the environment, and the environment replies with observations and rewards (that is, a score).
+
+OpenAI Gym is a toolkit for developing and comparing reinforcement learning algorithms. The gym open-source library, gives us access to a standardized set of environments. Environments come as is with no predefined agent. 
+Link to Open AI environments: https://github.com/openai
+
+Bonsai is the machine teaching service in the Autonomous Systems suite from Microsoft. It builds on innovations in reinforcement learning to simplify AI development.
+we use Bonsai to create AI models (brains) that control and optimize complex systems. No neural net design required.
+
+
+## Usage
+
+Full documentation for Bonsai's Platform can be found at https://docs.bons.ai.
 
 Bonsai need two environment variables set to be able to attach to the platform.
 
@@ -13,36 +25,25 @@ The second is SIM_WORKSPACE. You can find this in the URL after /workspaces/ onc
 
 There is also an optional SIM_API_HOST key, but if it is not set it will default to https://api.bons.ai.
 
-If you're launching your simulator from the command line, make sure that you have these two environment variables set. If you like, you could use the following example script:
+You will need to install support libraries prior to running. Our environment depend on microsoft_bonsai_api package.
 
-export SIM_WORKSPACE=<your-workspace-id>
-export SIM_ACCESS_KEY=<your-access-key>
-python3 cartpole.py
-You will need to install support libraries prior to running. Our demos depend on bonsai3-py. This library will need to be installed from source. The cartpole-py repository should be in a folder called samples at the same level as bonsai3-py.
+pip3 install microsoft_bonsai_api
 
-You can also clone bonsai3-py directly here.
+## Environments
 
-pip3 install -e ./bonsai3-py
-This is the gym open-source library, which gives you access to a standardized set of environments.
-
-
-
-Integration between Bonsai AI and Open AI gym environments
-# Environments
-
-## Pendulum
+### Pendulum
 
 ![Alt Text](assets/pendulum_bonsai_training.jpg)
 
-### Trained:
+####Trained:
 
 ![Alt Text](assets/pendulum.gif)
 
-## Mountain Car
-
-![Alt Text](assets/mountain_car.gif)
-
-### Trained:
+### Mountain Car
 
 ![Alt Text](assets/mountain_car.jpg)
+
+#### Trained:
+
+![Alt Text](assets/mountain_car.gif)
 
