@@ -5,7 +5,7 @@ import logging as log
 
 from typing import Dict, Any, Optional
 
-from simmodel import SimModel
+from gymsimulator import SimModel
 from gymsimulator import GymSimulator
 
 #log = Logger()

@@ -8,6 +8,6 @@ Bonsai Gym Simulator Library.
 """
 
 # pyright: reportUnusedImport=false
-from .sim_model import SimModel
-from .gym_simulator import GymSimulator
+from .simmodel import SimModel
+from .gymsimulator import GymSimulator
 from .version import __version__

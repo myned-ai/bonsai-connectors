@@ -6,6 +6,13 @@ RUN apt-get update && \
   apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
+COPY simulator ./simulator
+RUN pip3 install -U setuptools \
+  && cd simulator \
+  && pip3 install . \
+  && pip3 install gym \
+  && pip3 uninstall -y setuptools
+  
 # Install SDK3 Python
 RUN pip3 install -U setuptools \
   && pip3 install microsoft-bonsai-api \
@@ -18,8 +25,6 @@ WORKDIR /sim
 # Copy simulator files to /sim
 COPY samples/PendulumV2/pendulum_gym.py \
      samples/PendulumV2/simulator_interface.json \
-	 samples/PendulumV2/gymsimulator.py \
-	 samples/PendulumV2/simmodel.py \
      /sim/ 
 
 

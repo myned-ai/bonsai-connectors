@@ -207,14 +207,12 @@ class GymSimulator():
         return self.finished
 
     def get_interface(self) -> Dict[str, Any]:
-        interface_file_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)
-                            ), "simulator_interface.json"
-        )
+        interface_file_path ="simulator_interface.json"
+        
         with open(interface_file_path) as file:
             interface = json.load(file)
         return interface
-		
+
     def _parse_arguments(self):
         """ parses command line arguments and returns them as a list
         """
