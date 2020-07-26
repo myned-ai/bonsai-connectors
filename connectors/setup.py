@@ -13,10 +13,10 @@ setup(
     version=version['__version__'],
     description="Simulator interface library",
     long_description="Simulator interface library for Open AI Gym and Microsoft Bonsai AI",
-    url="",
-    author="Goran Jakovljevic",
+    url="https://github.com/Talos-Lab",
+    author="Talos-Lab",
     author_email='goran.jakovljevic@parallax-solutions.co.uk',
-    license="",
+    license="BSD",
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
@@ -25,12 +25,12 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Natural Language :: English'
     ],
-    keywords="gymsimulator",
+    keywords="gym_connectors",
     install_requires=[
         'wheel>=0.31.0',
         'requests>=2.18',
         'jsons==1.0.0',
     ],
-    python_requires='>=3.5',
+    python_requires='>=3.6',
     packages=find_packages(),
 )

@@ -3,8 +3,8 @@ import logging as log
 
 from typing import Dict, Any
 
-from gymsimulator import SimModel
-from gymsimulator import GymSimulator
+from gym_connectors import BonsaiConnector
+from gym_connectors import GymSimulator
 
 #log = Logger()
 
@@ -75,6 +75,6 @@ if __name__ == "__main__":
   #  config = ServiceConfig(argv=sys.argv)
   #  log.debug("arguments {}".format(sys.argv))
     pendulum = PendulumModel()
-    simmodel = SimModel(pendulum)
+    simmodel = BonsaiConnector(pendulum)
     while simmodel.run():
         continue
