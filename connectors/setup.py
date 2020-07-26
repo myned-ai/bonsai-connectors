@@ -6,23 +6,22 @@ log = logging.getLogger(__name__)
 log.debug('Running setup...')
 
 version = {}
-with open("./gymsimulator/version.py") as fp:
+with open("./gym_connectors/version.py") as fp:
     exec(fp.read(), version)
 setup(
-    name="gymsimulator",
+    name="gym_connectors",
     version=version['__version__'],
     description="Simulator interface library",
-    long_description="test",
+    long_description="Simulator interface library for Open AI Gym and Microsoft Bonsai AI",
     url="",
-    author="",
-    author_email='',
+    author="Goran Jakovljevic",
+    author_email='goran.jakovljevic@parallax-solutions.co.uk',
     license="",
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'License :: OSI Approved :: BSD License',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Natural Language :: English'
     ],

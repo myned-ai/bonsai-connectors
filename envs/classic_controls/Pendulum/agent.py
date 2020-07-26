@@ -2,6 +2,7 @@ import argparse
 import sys
 
 import gym
+import pybulletgym
 from gym import wrappers, logger
 import requests
 
@@ -43,7 +44,7 @@ class RandomAgent(object):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=None)
-    parser.add_argument('env_id', nargs='?', default='Pendulum-v0',
+    parser.add_argument('env_id', nargs='?', default='HopperPyBulletEnv-v0',
                         help='Select the environment to run')
     args = parser.parse_args()
 
@@ -51,7 +52,8 @@ if __name__ == '__main__':
     # want to change the amount of output.
     logger.set_level(logger.INFO)
 
-    env = gym.make(args.env_id)
+    env = gym.make('HopperPyBulletEnv-v0')
+
 
     # You provide the directory to write to (can be an existing
     # directory, including one with existing data -- all monitor files
@@ -60,8 +62,12 @@ if __name__ == '__main__':
     outdir = '/tmp/random-agent-results'
     # env = wrappers.Monitor(env, directory=outdir, force=True)
     env.seed(0)
-    agent = BonsaiAgent(env.action_space)
+    agent = RandomAgent(env.action_space)
 
+    env.render()
+    env.reset()
+
+	
     episode_count = 100
     reward = 0
     done = False

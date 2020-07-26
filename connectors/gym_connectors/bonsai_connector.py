@@ -7,18 +7,19 @@ from microsoft_bonsai_api.simulator.models import (
     SimulatorInterface,
 )
 
-class SimModel():
-        
+
+class BonsaiConnector():
+
     def __init__(self, simulator):
         self.simulator = simulator
 
     def get_state(self):
-       return self.simulator.get_state()
+        return self.simulator.get_state()
 
     def get_interface(self) -> Dict[str, Any]:
         return self.simulator.get_interface()
 
-    def halted(self)->bool:
+    def halted(self) -> bool:
         """
         Should return weather the episode is halted, and
         no further action will result in a state.
@@ -49,36 +50,36 @@ class SimModel():
 
         # Create simulator session and init sequence id
         registration_info = SimulatorInterface(
-                                name=interface['name'], 
-                                timeout=interface['timeout'], 
-                                simulator_context=config_client.simulator_context, 
+            name=interface['name'],
+            timeout=interface['timeout'],
+            simulator_context=config_client.simulator_context,
         )
 
         # Registers a simulator with Bonsai platform
         registered_session = client.session.create(
-                                workspace_name=config_client.workspace, 
-                                body=registration_info
+            workspace_name=config_client.workspace,
+            body=registration_info
         )
         print("Registered simulator.")
         registration_info
         sequence_id = 1
-            
+
         try:
             while True:
                 # Advance by the new state depending on the event type
 
                 sim_state = SimulatorState(
-                                session_id=registered_session.session_id,
-                                sequence_id=sequence_id, state=self.get_state(), 
-                                halted=self.halted()
+                    session_id=registered_session.session_id,
+                    sequence_id=sequence_id, state=self.get_state(),
+                    halted=self.halted()
                 )
                 event = client.session.advance(
-                            workspace_name=config_client.workspace, 
-                            session_id=registered_session.session_id, body=sim_state
+                    workspace_name=config_client.workspace,
+                    session_id=registered_session.session_id, body=sim_state
                 )
                 sequence_id = event.sequence_id
-                print("[{}] Last Event: {}".format(time.strftime('%H:%M:%S'), 
-                                                event.type))
+                print("[{}] Last Event: {}".format(time.strftime('%H:%M:%S'),
+                                                   event.type))
 
                 # Event loop
                 if event.type == 'Idle':
@@ -93,7 +94,7 @@ class SimModel():
                     self.episode_finish("")
                 elif event.type == 'Unregister':
                     client.session.delete(
-                        workspace_name=config_client.workspace, 
+                        workspace_name=config_client.workspace,
                         session_id=registered_session.session_id
                     )
                     print("Unregistered simulator.")
@@ -102,14 +103,14 @@ class SimModel():
         except KeyboardInterrupt:
             # Gracefully unregister with keyboard interrupt
             client.session.delete(
-                workspace_name=config_client.workspace, 
+                workspace_name=config_client.workspace,
                 session_id=registered_session.session_id
             )
             print("Unregistered simulator.")
         except Exception as err:
             # Gracefully unregister for any other exceptions
             client.session.delete(
-                workspace_name=config_client.workspace, 
+                workspace_name=config_client.workspace,
                 session_id=registered_session.session_id
             )
-            print("Unregistered simulator because: {}".format(err))  
+            print("Unregistered simulator because: {}".format(err))
