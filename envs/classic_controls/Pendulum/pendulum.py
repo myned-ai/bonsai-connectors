@@ -9,7 +9,7 @@ from gym_connectors import GymSimulator
 #log = Logger()
 
 
-class PendulumModel(GymSimulator):
+class Pendulum(GymSimulator):
     # Environment name, from openai-gym
     environment_name = 'Pendulum-v0'
 
@@ -74,7 +74,7 @@ class PendulumModel(GymSimulator):
 if __name__ == "__main__":
   #  config = ServiceConfig(argv=sys.argv)
   #  log.debug("arguments {}".format(sys.argv))
-    pendulum = PendulumModel()
-    simmodel = BonsaiConnector(pendulum)
-    while simmodel.run():
+    pendulum = Pendulum()
+    connector = BonsaiConnector(pendulum)
+    while connector.run():
         continue

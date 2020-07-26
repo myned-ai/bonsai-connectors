@@ -1,46 +1,38 @@
-import sys
-import os
 import numpy as np
-from bonsai3 import ServiceConfig, SimulatorInterface, Schema
-from gym_simulator import GymSimulator
-from bonsai3.logger import Logger
-from sim_model import SimModel
+import logging as log
 
-log = Logger()
+from typing import Dict, Any
+
+from gym_connectors import BonsaiConnector
+from gym_connectors import GymSimulator
+
+#log = Logger()
 
 
-class MountainCarModel(GymSimulator):
+class MountainCar(GymSimulator):
     # Environment name, from openai-gym
     environment_name = 'MountainCar-v0'
 
-    # Simulator name from Inkling
-    ### Check how this is linked with inkling ###
-    simulator_name = 'MountainCarSimulator'
+    def __init__(self, iteration_limit=200, skip_frame=1):
 
-    def reset(
-        self,
-        initial_position: float = 0,
-        initial_speed: float = 0
-    ):
+        self.bonsai_state = {"position": 0.0,
+                             "speed": 0.0}
 
-        self.state1 = {"position": initial_position,
-                       "speed": initial_speed}
-    '''
-    convert openai gym observation to our state type
-  
-    '''
+        super().__init__(iteration_limit, skip_frame)
+
+    # convert openai gym observation to our state type
 
     def gym_to_state(self, observation):
-        self.state1 = {"position": observation[0],
-                       "speed": observation[1]}
+        self.bonsai_state = {"position": float(observation[0]),
+                             "speed": float(observation[1])}
 
-        return self.state1
+        return self.bonsai_state
 
     def state(self):
-        return self.state1
+        return self.bonsai_state
 
     # convert our action type into openai gym action
-    def action_to_gym(self, action):
+    def action_to_gym(self, action: Dict[str, Any]):
         actionValue = action['command']
         return actionValue
 
@@ -51,18 +43,11 @@ class MountainCarModel(GymSimulator):
             self.state(), self._env.env.state))
         return self.state()
 
-    def get_interface(self) -> SimulatorInterface:
-        interface_file_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)
-                            ), "mountain_car_interface.json"
-        )
-        return SimulatorInterface(self.get_simulator_context(), interface_file_path)
-
 
 if __name__ == "__main__":
-    config = ServiceConfig(argv=sys.argv)
-    log.info("arguments {}".format(sys.argv))
-    mountain_car = MountainCarModel(config)
-    mountain_car.reset()
-    while mountain_car.run():
+  #  config = ServiceConfig(argv=sys.argv)
+  #  log.info("arguments {}".format(sys.argv))
+    mountain_car = MountainCar()
+    connector = BonsaiConnector(mountain_car)
+    while connector.run():
         continue
