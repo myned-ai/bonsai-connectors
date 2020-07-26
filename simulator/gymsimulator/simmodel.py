@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
-import os
-import sys
-import json
 import time
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from microsoft_bonsai_api.client import BonsaiClientConfig, BonsaiClient
 from microsoft_bonsai_api.simulator.models import (
     SimulatorState,
@@ -12,33 +9,36 @@ from microsoft_bonsai_api.simulator.models import (
 
 class SimModel():
         
-    def attach(self, simulator_session):
-        self.simulator_session = simulator_session
+    def __init__(self, simulator):
+        self.simulator = simulator
 
     def get_state(self):
-       return self.simulator_session.get_state()
+       return self.simulator.get_state()
 
     def get_interface(self) -> Dict[str, Any]:
-        return self.simulator_session.get_interface()
+        return self.simulator.get_interface()
 
     def halted(self)->bool:
         """
         Should return weather the episode is halted, and
         no further action will result in a state.
         """
-        return self.simulator_session.halted()
+        return self.simulator.halted()
 
     def episode_start(self, config: Dict[str, Any]):
         """ 
         Called at the start of each episode 
         """
-        self.simulator_session.episode_start(config)
+        self.simulator.episode_start(config)
 
     def episode_step(self, action: Dict[str, Any]):
         """ 
         Called for each step of the episode 
         """
-        self.simulator_session.episode_step(action)
+        self.simulator.episode_step(action)
+
+    def episode_finish(self, reason: str):
+        self.simulator.episode_finish(reason)
 
     def run(self):
         config_client = BonsaiClientConfig(enable_logging=True)
@@ -90,6 +90,7 @@ class SimModel():
                     self.episode_step(event.episode_step.action)
                 elif event.type == 'EpisodeFinish':
                     print('Episode Finishing...')
+                    self.episode_finish("")
                 elif event.type == 'Unregister':
                     client.session.delete(
                         workspace_name=config_client.workspace, 

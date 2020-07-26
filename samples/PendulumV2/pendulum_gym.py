@@ -1,9 +1,7 @@
-import sys
-import os
 import numpy as np
 import logging as log
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
 from gymsimulator import SimModel
 from gymsimulator import GymSimulator
@@ -15,16 +13,14 @@ class PendulumModel(GymSimulator):
     # Environment name, from openai-gym
     environment_name = 'Pendulum-v0'
 
-    def __init__(self, sim_model, iteration_limit=200, skip_frame=1):
+    def __init__(self, iteration_limit=200, skip_frame=1):
       #  log.set_enabled("debug", True)
-        # send this class instance to the sim_model
-        sim_model.attach(self)
 
         self.bonsai_state = {"cos_theta": 0.0,
                              "sin_theta": 0.0,
                              "angular_velocity": 0.0}
 
-        super().__init__(sim_model, iteration_limit, skip_frame)
+        super().__init__(iteration_limit, skip_frame)
 
     # convert openai gym observation to our state type
 
@@ -78,8 +74,7 @@ class PendulumModel(GymSimulator):
 if __name__ == "__main__":
   #  config = ServiceConfig(argv=sys.argv)
   #  log.debug("arguments {}".format(sys.argv))
-    simmodel = SimModel()
-    pendulum = PendulumModel(simmodel)
-
-    while pendulum.run():
+    pendulum = PendulumModel()
+    simmodel = SimModel(pendulum)
+    while simmodel.run():
         continue

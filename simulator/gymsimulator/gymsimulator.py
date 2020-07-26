@@ -22,13 +22,11 @@ class GymSimulator():
     """
     environment_name = ''  # name of the OpenAI Gym environment
 
-    def __init__(self, sim_model,iteration_limit=200, skip_frame=1):
+    def __init__(self, iteration_limit=200, skip_frame=1):
         """ initialize the GymSimulator with a bonsai.Config,
             the class variables will be used to setup the environment
             and simulator name as specified in inkling
         """
-        self.sim_model = sim_model
-
         # create the gym environment
         self._env = gym.make(self.environment_name)
 
@@ -53,9 +51,6 @@ class GymSimulator():
         # book keeping for rate status
         self._log_interval = 10.0  # seconds
         self._last_status = time()
-
-    def run(self) -> bool:
-        return self.sim_model.run()
 
     # convert openai gym observation to our state schema
     def gym_to_state(self, observation):
