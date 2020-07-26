@@ -1,4 +1,6 @@
 # bonsai-gym
 Integration between Bonsai AI and Open AI gym environments
 
-![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
+![Alt Text](assets/pendulum.gif)
+
+![Alt Text](assets/pendulum_bonsai_training.jpg)
