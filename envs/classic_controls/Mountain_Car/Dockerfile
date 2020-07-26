@@ -7,23 +7,22 @@ RUN apt-get update && \
   && rm -rf /var/lib/apt/lists/*
 
 # Install SDK3 Python
-COPY bonsai3-py ./bonsai3-py
+COPY connectors ./connectors
 RUN pip3 install -U setuptools \
-  && cd bonsai3-py \
-  && python3 setup.py develop \
+  && cd connectors \
+  && pip3 install . \
   && pip3 install gym \
+  && pip3 install microsoft-bonsai-api \
   && pip3 uninstall -y setuptools
-
 
 # Set up the simulator
 WORKDIR /sim
 
 # Copy simulator files to /sim
-COPY samples/Pendulum/gym.py \
-     samples/Pendulum/simulator_interface.json \
-     simulator \
-     sim/ 
+COPY envs/classic_controls/Mountain_Car/mountain_car.py \
+     envs/classic_controls/Mountain_Car/simulator_interface.json \
+     /sim/ 
 
 
 # This will be the command to run the simulator
-CMD ["python", "gym.py", "--verbose"]
+CMD ["python", "mountain_car.py", "--verbose"]

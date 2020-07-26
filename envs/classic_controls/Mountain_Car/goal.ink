@@ -40,7 +40,7 @@ graph (input: SimState): SimAction {
                 maximize `speed`:
                     State.speed in Goal.Range(0, 0.07)       
             }
-
+            
             training {
                 # Limit the number of iterations per episode to 120. The default
                 # is 1000, which makes it much tougher to succeed.
