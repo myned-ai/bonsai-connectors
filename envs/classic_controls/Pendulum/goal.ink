@@ -39,7 +39,7 @@ graph (input: SimState): SimAction {
             # subgoals: don't let the pole fall over, and don't move
             # the cart off the track.
             goal (State: SimState) {
-                drive `cos is zero`:
+                drive `cos upwards`:
                     State.cos_theta in Goal.Range(0.707, 1.0)
             }
 

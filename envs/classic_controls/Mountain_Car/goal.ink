@@ -38,9 +38,9 @@ graph (input: SimState): SimAction {
                 reach `car position`:
                     State.position in Goal.RangeAbove(0.5)   
                 maximize `speed`:
-                    State.speed in Goal.Range(0, 0.07)       
+                    Math.Abs(State.speed) in Goal.Range(0, 0.07)       
             }
-            
+
             training {
                 # Limit the number of iterations per episode to 120. The default
                 # is 1000, which makes it much tougher to succeed.
