@@ -76,13 +76,30 @@ goal (State: SimState) {
 
 #### 2. Mountain Car
 
+Drive up a big hill.
+
+We have trained the agent using two  goal statements.
+
+'''
+goal (State: SimState) {
+    reach `car position`:
+        State.position in Goal.RangeAbove(0.5)   
+    maximize `speed`:
+        Math.Abs(State.speed) in Goal.Range(0, 0.07)       
+}
+'''
+
+**Bonsai Output:**
+
 ![Alt Text](assets/mountain_car.jpg)
 
-##### Trained:
+**Exported Brain performance:**
 
 ![Alt Text](assets/mountain_car.gif)
 
 ### PyBullet
+
+Bullet is a physics engine which simulates collision detection, soft and rigid body dynamics.
 
 #### 1. Reacher
 **Coming Soon!**
