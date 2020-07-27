@@ -39,6 +39,8 @@ We have developed few working examples and we aim to expand this list continuous
 As with every problem, there are more than just one way to solve or achieve satisfactory results.
 We are open to suggestions and we encourage code contribution.
 
+Inside on each environment folder we have created an agent that can run locally to communicate with the exported Bonsai brain (running on Docker) and is rendering the simulation using Open AI environment.
+
 ### Classic Controls
 
 A collection of control theory problems from the classic RL literature.
@@ -66,11 +68,12 @@ goal (State: SimState) {
         State.cos_theta in Goal.Range(0.707, 1.0)
 }
 ```
-**- Bonsai training output:**
+
+- Bonsai training output:
 
 ![Alt Text](assets/pendulum_bonsai_training.jpg)
 
-**- Exported agent (brain) performance:**
+- Exported agent (brain) performance:
 
 ![Alt Text](assets/pendulum.gif)
 
@@ -91,11 +94,11 @@ goal (State: SimState) {
 }
 ```
 
-**- Bonsai training output:**
+- Bonsai training output:
 
 ![Alt Text](assets/mountain_car.jpg)
 
-**- Exported agent (brain) performance:**
+- Exported agent (brain) performance:
 
 ![Alt Text](assets/mountain_car.gif)
 
@@ -105,3 +108,5 @@ Bullet is a physics engine which simulates collision detection, soft and rigid b
 
 #### 1. Reacher
 **Coming Soon!**
+
+![Alt Text](assets/reacher.png)
