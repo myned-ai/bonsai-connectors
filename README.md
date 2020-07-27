@@ -43,9 +43,9 @@ We are open to suggestions and we encourage code contribution.
 
 A collection of control theory problems from the classic RL literature.
 
-#### 1. Pendulum
+#### 1. Inverted Pendulum
 
-Swing up a pendulum and keep it upright.
+The inverted pendulum swingup problem is a classic problem in the control literature. In this version of the problem, the pendulum starts in a random position, and the goal is to swing it up so it stays upright.
 
 We have trained the agent using a reward function, although a goal statement produced equally good results.
 
@@ -76,7 +76,9 @@ goal (State: SimState) {
 
 #### 2. Mountain Car
 
-Drive up a big hill.
+A car is on a one-dimensional track, positioned between two "mountains". The goal is to drive up the mountain on the right; however, the car's engine is not strong enough to scale the mountain in a single pass. Therefore, the only way to succeed is to drive back and forth to build up momentum.
+
+The environment appeared first in Andrew Moore's PhD Thesis (1990).
 
 We have trained the agent using two  goal statements.
 
