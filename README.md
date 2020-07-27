@@ -15,17 +15,17 @@ we use Bonsai to create agents (brains) that control and optimize complex system
 
 Full documentation for Bonsai's Platform can be found at https://docs.bons.ai.
 
-## Set Up
+## Set-Up
 
 Bonsai need two environment variables set to be able to attach to the platform.
 
-The first is SIM_ACCESS_KEY. You can create one from the Account Settings page.
-The second is SIM_WORKSPACE. You can find this in the URL after /workspaces/ once you are logged in to the platform.
+The first is **SIM_ACCESS_KEY**. You can create one from the Account Settings page.
+The second is **SIM_WORKSPACE**. You can find this in the URL after ***/workspaces/*** once you are logged in to the platform.
 
 
 
 You will need to install support libraries prior to running locally. 
-Our environment depend on microsoft_bonsai_api package and on our gym_connectors
+Our environment depend on **microsoft_bonsai_api** package and on **gym_connectors** from this codebase.
 
 ```
 cd connectors
@@ -55,4 +55,4 @@ pip3 install microsoft_bonsai_api
 
 ### PyBullet
 
-Coming Soon
+**Coming Soon**
