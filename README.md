@@ -67,9 +67,11 @@ goal (State: SimState) {
 }
 ```
 **Bonsai Output:**
+
 ![Alt Text](assets/pendulum_bonsai_training.jpg)
 
 **Exported Brain performance:**
+
 ![Alt Text](assets/pendulum.gif)
 
 #### 2. Mountain Car
