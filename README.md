@@ -11,7 +11,7 @@ OpenAI Gym is a toolkit for developing and comparing reinforcement learning algo
 Link to Open AI environments: https://github.com/openai
 
 Bonsai is the machine teaching service in the Autonomous Systems suite from Microsoft. It builds on innovations in reinforcement learning to simplify AI development.
-we use Bonsai to create agents (brains) that control and optimise complex systems. No neural net design required.
+We use Bonsai to create agents (brains) that control and optimise complex systems. No neural net design required.
 
 Full documentation for Bonsai's Platform can be found at https://docs.bons.ai.
 
