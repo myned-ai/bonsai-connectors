@@ -35,9 +35,13 @@ pip3 install microsoft_bonsai_api
 
 ## Environments
 
+We have depeloped few working examples and we aim to expand this list continuously by adding new environments from different physic engines.
+As with every problem, there are more than just one way to solve or achieve satisfactory results.
+We are open to suggestions and we encourage code contribution.
+
 ### Classic Controls
 
-#### Pendulum
+#### 1. Pendulum
 
 ![Alt Text](assets/pendulum_bonsai_training.jpg)
 
@@ -45,7 +49,7 @@ pip3 install microsoft_bonsai_api
 
 ![Alt Text](assets/pendulum.gif)
 
-#### Mountain Car
+#### 2. Mountain Car
 
 ![Alt Text](assets/mountain_car.jpg)
 
@@ -55,4 +59,5 @@ pip3 install microsoft_bonsai_api
 
 ### PyBullet
 
-**Coming Soon**
+#### 1. Reacher
+**Coming Soon!**
