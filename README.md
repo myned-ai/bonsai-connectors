@@ -35,18 +35,41 @@ pip3 install microsoft_bonsai_api
 
 ## Environments
 
-We have depeloped few working examples and we aim to expand this list continuously by adding new environments from different physic engines.
+We have depeloped few working examples and we aim to expand this list continuously by adding new environments from different physic's engines.
 As with every problem, there are more than just one way to solve or achieve satisfactory results.
 We are open to suggestions and we encourage code contribution.
 
 ### Classic Controls
 
+A collection of control theory problems from the classic RL literature.
+
 #### 1. Pendulum
 
+Swing up a pendulum and keep it upright.
+
+We have trained the agent using a reward function, although a goal statement produced equally good results.
+
+Reward function:
+```
+function GetReward(State: SimState, Action: SimAction) {
+    var u = Action.command
+    var th = Math.ArcCos(State.cos_theta)
+    var rew = ((((th + Math.Pi) % (2 * Math.Pi)) - Math.Pi) ** 2) + 0.1 * (State.angular_velocity ** 2) + 0.001 * (u ** 2)
+
+    return -rew
+}
+```
+Alernative Goal statement:
+```
+goal (State: SimState) {
+    drive `cos upwards`:
+        State.cos_theta in Goal.Range(0.707, 1.0)
+}
+```
+**Bonsai Output:**
 ![Alt Text](assets/pendulum_bonsai_training.jpg)
 
-##### Trained:
-
+**Exported Brain performance:**
 ![Alt Text](assets/pendulum.gif)
 
 #### 2. Mountain Car
