@@ -1,17 +1,17 @@
 # Bonsai Gym
 
-Bonsai Gym is an open-source interface library, which gives us access to OpenAI Gym standardized set of environments while using Microsoft Bonsai platform.
+Bonsai Gym is an open-source interface library, which gives us access to OpenAI Gym standardised set of environments while using Microsoft Bonsai platform.
 
 ## Basics
 
 There are two basic concepts in reinforcement learning: the environment (namely, the outside world) and the agent (namely, the algorithm you are writing). The agent sends actions to the environment, and the environment replies with observations and rewards (that is, a score).
 
-OpenAI Gym is a toolkit for developing and comparing reinforcement learning algorithms. The gym open-source library, gives us access to a standardized set of environments. Environments come as is with no predefined agent. 
+OpenAI Gym is a toolkit for developing and comparing reinforcement learning algorithms. The gym open-source library, gives us access to a standardised set of environments. Environments come as is with no predefined agent.
 
 Link to Open AI environments: https://github.com/openai
 
 Bonsai is the machine teaching service in the Autonomous Systems suite from Microsoft. It builds on innovations in reinforcement learning to simplify AI development.
-we use Bonsai to create agents (brains) that control and optimize complex systems. No neural net design required.
+we use Bonsai to create agents (brains) that control and optimise complex systems. No neural net design required.
 
 Full documentation for Bonsai's Platform can be found at https://docs.bons.ai.
 
@@ -24,7 +24,7 @@ The second is **SIM_WORKSPACE**. You can find this in the URL after ***/workspac
 
 
 
-You will need to install support libraries prior to running locally. 
+You will need to install support libraries prior to running locally.
 Our environment depend on **microsoft_bonsai_api** package and on **gym_connectors** from this codebase.
 
 ```
@@ -35,7 +35,7 @@ pip3 install microsoft_bonsai_api
 
 ## Environments
 
-We have depeloped few working examples and we aim to expand this list continuously by adding new environments from different physic's engines.
+We have developed few working examples and we aim to expand this list continuously by adding new environments from different physic's engines.
 As with every problem, there are more than just one way to solve or achieve satisfactory results.
 We are open to suggestions and we encourage code contribution.
 
@@ -45,7 +45,7 @@ A collection of control theory problems from the classic RL literature.
 
 #### 1. Inverted Pendulum
 
-The inverted pendulum swingup problem is a classic problem in the control literature. In this version of the problem, the pendulum starts in a random position, and the goal is to swing it up so it stays upright.
+The inverted pendulum swing-up problem is a classic problem in the control literature. In this version of the problem, the pendulum starts in a random position, and the goal is to swing it up so it stays upright.
 
 We have trained the agent using a reward function, although a goal statement produced equally good results.
 
@@ -59,7 +59,7 @@ function GetReward(State: SimState, Action: SimAction) {
     return -rew
 }
 ```
-Alernative Goal statement:
+Alternative Goal statement:
 ```
 goal (State: SimState) {
     drive `cos upwards`:
@@ -85,9 +85,9 @@ We have trained the agent using two  goal statements.
 ```
 goal (State: SimState) {
     reach `car position`:
-        State.position in Goal.RangeAbove(0.5)   
+        State.position in Goal.RangeAbove(0.5)  
     maximize `speed`:
-        Math.Abs(State.speed) in Goal.Range(0, 0.07)       
+        Math.Abs(State.speed) in Goal.Range(0, 0.07)      
 }
 ```
 
