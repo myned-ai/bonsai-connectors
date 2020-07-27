@@ -1,20 +1,18 @@
-import numpy as np
-import logging as log
+import logging
+from typing import Any, Dict
 
-from typing import Dict, Any
-
-from gym_connectors import BonsaiConnector
-from gym_connectors import GymSimulator
-
-#log = Logger()
+from gym_connectors import BonsaiConnector, GymSimulator
 
 
 class MountainCar(GymSimulator):
-    # Environment name, from openai-gym
-    environment_name = 'MountainCar-v0'
+    """ Implements the methods specific to Open AI Gym Pendulum environment 
+    """    
+    
+    environment_name = 'MountainCar-v0'      # Environment name, from openai-gym
 
     def __init__(self, iteration_limit=200, skip_frame=1):
-
+        """ Initializes the Mountain Car environment
+        """
         self.bonsai_state = {"position": 0.0,
                              "speed": 0.0}
 
@@ -22,32 +20,41 @@ class MountainCar(GymSimulator):
 
     # convert openai gym observation to our state type
 
-    def gym_to_state(self, observation):
+    def gym_to_state(self, observation) -> Dict[str, Any]:
+        """ Converts openai environment observation to Bonsai state, as defined in inkling
+        """
         self.bonsai_state = {"position": float(observation[0]),
                              "speed": float(observation[1])}
 
         return self.bonsai_state
 
-    def state(self):
-        return self.bonsai_state
-
-    # convert our action type into openai gym action
     def action_to_gym(self, action: Dict[str, Any]):
-        actionValue = action['command']
+        """ Converts Bonsai action type into openai environment action.       
+        """
+        actionValue = action['command']    #Open AI env doesn't expect array here
         return actionValue
 
-    # Callbacks
-
-    def get_state(self):
-        log.info('get_state: {}   gym_state: {}'.format(
-            self.state(), self._env.env.state))
-        return self.state()
+    def get_state(self) -> Dict[str, Any]:
+        """ Returns the current state of the environment 
+        """
+        log.debug('get_state: {}'.format(self.bonsai_state))
+        return self.bonsai_state
 
 
 if __name__ == "__main__":
-  #  config = ServiceConfig(argv=sys.argv)
-  #  log.info("arguments {}".format(sys.argv))
+    """ Creates a Mountain Car environment, passes it to the BonsaiConnector 
+        that connects to the Bonsai service that can use it as a simulator  
+    """
+    logging.basicConfig()
+    log = logging.getLogger("mountain-car")
+    log.setLevel(level='DEBUG')
+
+    #if more information is needed, uncomment this
+    #gymlog = logging.getLogger("GymSimulator")
+    #gymlog.setLevel(level='DEBUG')
+
     mountain_car = MountainCar()
     connector = BonsaiConnector(mountain_car)
+
     while connector.run():
         continue

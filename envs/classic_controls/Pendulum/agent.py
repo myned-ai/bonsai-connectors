@@ -50,7 +50,7 @@ if __name__ == '__main__':
     # specify which agent you want to use, 
     # BonsaiAgent that uses trained Brain or
     # RandomAgent that randomly selects next action
-    agent = RandomAgent(env.action_space)
+    agent = BonsaiAgent(env.action_space)
 
     env.render()
     env.reset()
@@ -67,6 +67,4 @@ if __name__ == '__main__':
             env.render()
             if done:
                 break
-
-    # Close the env and write monitor result info to disk
     env.close()

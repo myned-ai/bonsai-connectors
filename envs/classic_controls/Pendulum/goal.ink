@@ -1,5 +1,5 @@
 # This sample demonstrates how to teach a policy for controlling
-# a pendulum device.
+# an inverted pendulum device.
 
 inkling "2.0"
 
@@ -38,23 +38,16 @@ graph (input: SimState): SimAction {
             algorithm {
                 Algorithm: "SAC"
             }
-            # The objective of training is expressed as a goal with two
-            # subgoals: don't let the pole fall over, and don't move
-            # the cart off the track.
+
             goal (State: SimState) {
                 drive `cos upwards`:
                     State.cos_theta in Goal.Range(0.707, 1.0)
             }
 
             training {
-                # Limit the number of iterations per episode to 120. The default
-                # is 1000, which makes it much tougher to succeed.
+                # Limit the number of iterations per episode.
                 EpisodeIterationLimit: 120
             }
         }
     }
 }
-
-# Special string to hook up the simulator visualizer
-# in the web interface.
-const SimulatorVisualizer = "/pendulumviz/"

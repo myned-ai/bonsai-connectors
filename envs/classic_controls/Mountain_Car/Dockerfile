@@ -25,4 +25,4 @@ COPY envs/classic_controls/Mountain_Car/mountain_car.py \
 
 
 # This will be the command to run the simulator
-CMD ["python", "mountain_car.py", "--verbose"]
+CMD ["python", "mountain_car.py","--headless", "--verbose"]
