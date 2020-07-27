@@ -35,7 +35,7 @@ pip3 install microsoft_bonsai_api
 
 ## Environments
 
-We have developed few working examples and we aim to expand this list continuously by adding new environments from different physic's engines.
+We have developed few working examples and we aim to expand this list continuously by adding new environments from different physics engines.
 As with every problem, there are more than just one way to solve or achieve satisfactory results.
 We are open to suggestions and we encourage code contribution.
 
