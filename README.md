@@ -66,11 +66,11 @@ goal (State: SimState) {
         State.cos_theta in Goal.Range(0.707, 1.0)
 }
 ```
-**- bonsai output:**
+**- Bonsai training output:**
 
 ![Alt Text](assets/pendulum_bonsai_training.jpg)
 
-**- exported agent (brain) performance:**
+**- Exported agent (brain) performance:**
 
 ![Alt Text](assets/pendulum.gif)
 
@@ -89,11 +89,11 @@ goal (State: SimState) {
 }
 ```
 
-**- bonsai output:**
+**- Bonsai training output:**
 
 ![Alt Text](assets/mountain_car.jpg)
 
-**- exported agent (brain) performance:**
+**- Exported agent (brain) performance:**
 
 ![Alt Text](assets/mountain_car.gif)
 
