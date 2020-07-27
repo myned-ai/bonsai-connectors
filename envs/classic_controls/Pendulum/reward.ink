@@ -1,5 +1,5 @@
 # This sample demonstrates how to teach a policy for controlling
-# a cartpole (inverted pendulum) device.
+# a pendulum device.
 
 inkling "2.0"
 

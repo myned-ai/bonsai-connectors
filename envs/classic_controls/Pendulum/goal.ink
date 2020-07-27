@@ -1,5 +1,5 @@
 # This sample demonstrates how to teach a policy for controlling
-# a cartpole (inverted pendulum) device.
+# a pendulum device.
 
 inkling "2.0"
 
@@ -34,7 +34,10 @@ graph (input: SimState): SimAction {
             # that takes an action as an input and outputs a state.
             source simulator (Action: SimAction): SimState {
             }
-
+            
+            algorithm {
+                Algorithm: "SAC"
+            }
             # The objective of training is expressed as a goal with two
             # subgoals: don't let the pole fall over, and don't move
             # the cart off the track.

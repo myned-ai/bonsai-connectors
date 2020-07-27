@@ -1,52 +1,49 @@
+import logging
+from typing import Any, Dict
+
 import numpy as np
-import logging as log
-
-from typing import Dict, Any
-
-from gym_connectors import BonsaiConnector
-from gym_connectors import GymSimulator
-
-#log = Logger()
-
+from gym_connectors import BonsaiConnector, GymSimulator
 
 class Pendulum(GymSimulator):
-    # Environment name, from openai-gym
-    environment_name = 'Pendulum-v0'
+    """ Implements the methods specific to Open AI Gym Pendulum environment 
+    """    
+
+    environment_name = 'Pendulum-v0'           # Environment name, from openai-gym
 
     def __init__(self, iteration_limit=200, skip_frame=1):
-      #  log.set_enabled("debug", True)
-
+        """ Initializes the Pendulum environment
+        """
         self.bonsai_state = {"cos_theta": 0.0,
                              "sin_theta": 0.0,
                              "angular_velocity": 0.0}
 
         super().__init__(iteration_limit, skip_frame)
 
-    # convert openai gym observation to our state type
-
-    def gym_to_state(self, observation):
+    def gym_to_state(self, observation) -> Dict[str, Any]:
+        """ Converts openai environment observation to Bonsai state, as defined in inkling
+        """
         self.bonsai_state = {"cos_theta": float(observation[0]),
                              "sin_theta": float(observation[1]),
                              "angular_velocity": float(observation[2])}
 
         return self.bonsai_state
 
-    def state(self):
-        return self.bonsai_state
-
-    # convert our action type into openai gym action
     def action_to_gym(self, action: Dict[str, Any]):
+        """ Converts Bonsai action type into openai environment action.       
+        """
         actionValue = action['command']
-        return [actionValue]
+        return [actionValue]      # Pendulum environment expects an array of actions 
 
     def gym_episode_start(self, config: Dict[str, Any]):
-        """
-        called during episode_start() to return the initial observation
-        after reseting the gym environment. clients can override this
-        to provide additional initialization.
+        """ Called during episode_start() to return the initial observation
+            after reseting the gym environment. 
+
+            config parameter is passed from an inkling lesson and can contain initial state
         """
         super().gym_episode_start(config)
 
+        #get the initial angle and angular velocity from config, 
+        # or if not passed in, use the value set with env.reset() 
         initial_theta = config.get(
             "initial_theta", self._env.unwrapped.state[0])
         initial_angular_velocity = config.get(
@@ -64,17 +61,27 @@ class Pendulum(GymSimulator):
         # return the initial observation
         return np.array([np.cos(initial_theta), np.sin(initial_theta), initial_angular_velocity])
 
-    # Callbacks
-
-    def get_state(self):
-        log.debug('get_state: {}'.format(self.state()))
-        return self.state()
+    def get_state(self) -> Dict[str, Any]:
+        """ Returns the current state of the environment 
+        """
+        log.debug('get_state: {}'.format(self.bonsai_state))
+        return self.bonsai_state
 
 
 if __name__ == "__main__":
-  #  config = ServiceConfig(argv=sys.argv)
-  #  log.debug("arguments {}".format(sys.argv))
+    """ Creates a Pendulum environment, passes it to the BonsaiConnector 
+        that connects to the Bonsai service that can use it as a simulator  
+    """
+    logging.basicConfig()
+    log = logging.getLogger("pendulum")
+    log.setLevel(level='DEBUG')
+
+    #if more information is needed, uncomment this
+    #gymlog = logging.getLogger("GymSimulator")
+    #gymlog.setLevel(level='DEBUG')
+
     pendulum = Pendulum()
     connector = BonsaiConnector(pendulum)
+
     while connector.run():
         continue

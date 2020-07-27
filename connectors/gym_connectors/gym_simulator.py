@@ -1,33 +1,32 @@
 import argparse
-import gym
-import logging as log
-import os
 import json
-
+import logging
+import os
 from time import sleep, time
-from typing import Dict, Any, Optional
+from typing import Any, Dict
 
-#log = Logger()
-#log.setLevel(0)
+import gym
 
-class GymSimulator():
+log = logging.getLogger("GymSimulator")
+log.setLevel(level='INFO')
+
+class GymSimulator:
     """ GymSimulator class
 
         End users should subclass GymSimulator to interface OpenAI Gym
-        environments to the Bonsai platform. A minimal subclass must
-        implement `gym_to_state()` and `action_to_gym()`, as well as
-        specify the `simulator_name` and `environment_name`.
-
-        To start the simulation for training, call `run_gym()`.
+        environments to the Bonsai platform. The derived class should provide 
+        the mapping between Bonsai and OpenAI environment's action and states and
+        specify the name of the OpenAI environemnt
     """
-    environment_name = ''  # name of the OpenAI Gym environment
+
+    environment_name = ''  # name of the OpenAI Gym environment specified in derived class
 
     def __init__(self, iteration_limit=200, skip_frame=1):
-        """ initialize the GymSimulator with a bonsai.Config,
-            the class variables will be used to setup the environment
-            and simulator name as specified in inkling
+        """ Initializes the GymSimulator object
         """
         # create the gym environment
+        log.info("Creating {} environment".format(self.environment_name))
+
         self._env = gym.make(self.environment_name)
 
         self.finished = False
@@ -36,13 +35,15 @@ class GymSimulator():
         self.iteration_count = 0
 
         # parse optional command line arguments
-        cli_args = self._parse_arguments()
+        cli_args = self.parse_arguments()
         if cli_args is not None:
             self._headless = cli_args.headless
 
         # optional parameters for controlling the simulation
         self._iteration_limit = iteration_limit    
-        self._skip_frame = skip_frame    # default is to process every frame
+
+        # default is to process every frame
+        self._skip_frame = skip_frame    
 
         # random seed
         self._env.seed(20)
@@ -52,38 +53,24 @@ class GymSimulator():
         self._log_interval = 10.0  # seconds
         self._last_status = time()
 
-    # convert openai gym observation to our state schema
-    def gym_to_state(self, observation):
-        """Convert a gym observation into an Inkling state
+    def gym_to_state(self, observation) -> None:
+        """Convert an openai environment observation into an Bonsai state
 
         Example:
             state = {'position': observation[0],
                      'velocity': observation[1],
                      'angle':    observation[2]}
             return state
-
-        :param observation: gym observation, see specific gym
-            environment for details.
-
-        :return A dictionary matching the Inkling state schema.
         """
         return None
 
-    # convert our action schema into openai gym action
     def action_to_gym(self, action):
-        """Convert an Inkling action schema into a gym action.
-
-        Example:
-            return action['command']
-
-        :param action: A dictionary as defined in the Inkling schema.
-        :return A gym action as defined in the gym environment
+        """Converts an Bonsai action into a openai environemnt action type and returns it
         """
         return action['command']
 
     def gym_episode_start(self, config: Dict[str, Any]):
-        """
-        called during episode_start() to return the initial observation
+        """ Called during episode_start() to return the initial observation
         after reseting the gym environment. clients can override this
         to provide additional initialization.
         """
@@ -91,8 +78,13 @@ class GymSimulator():
 
         return observation
 
-    def episode_start(self, config: Dict[str, Any]):
-        """ called at the start of each new episode
+    def episode_start(self, config: Dict[str, Any]) -> None:
+        """ Called at the start of each new episode
+            Initializes the iteration count, reward, finished variables 
+            and the initial state of the simulator (environment)
+
+            If the episode_iteration_limit was set in the lesson, 
+            its value would be used to limit the iteration count in this episode
         """
         log.info("- - - - - - - - - - - - - - - - - - -- - - - - -- ")
         log.info("--EPISODE {} START-- ".format(self.episode_count))
@@ -104,25 +96,24 @@ class GymSimulator():
         self.iteration_count = 0
         self.episode_reward = 0
 
-        # initial observation
+        # reset the environment and set the initial observation
         observation = self.gym_episode_start(config)
         self.gym_to_state(observation)
 
     def gym_simulate(self, gym_action):
-        """
-        called during simulate to single step the gym environment
-        and return (observation, reward, done, info).
-        clients can override this method to provide additional
-        reward shaping.
+        """Called during 'simulate' to advance a single step the gym environment
+            and return (observation, reward, done, info).
         """
         observation, reward, done, info = self._env.step(gym_action)
         return observation, reward, done, info
 
     def simulate(self, action):
-        """ step the simulation, optionally rendering the results
+        """ Do a step of the simulation, optionally rendering the results
         """
+        #convert the Bonsai actions to openai environemnt action type 
         gym_action = self.action_to_gym(action)
-        log.debug('simulating - action {}    gym_action {} state {}'.format(action, gym_action, self._env.env.state))
+        
+        log.debug('simulating - gym action {}   state {}'.format(gym_action, self._env.unwrapped.state))
 
         rwd_accum = 0
         done = False
@@ -132,7 +123,9 @@ class GymSimulator():
         for i in range(self._skip_frame):
             observation, reward, done, info = self.gym_simulate(gym_action)
             self.finished = done
-            log.debug('gym_simulate returned reward {} done {}  info {}'.format(reward, done, info))
+
+            log.debug('gym_simulate returned observation{} reward {} done {}  info {}'.format(observation, reward, done, info))
+
             self.episode_reward += reward
             rwd_accum += reward
 
@@ -140,76 +133,76 @@ class GymSimulator():
             if (self._iteration_limit > 0):
                 if (self.iteration_count >= self._iteration_limit):
                     self.finished = True
-                    log.info("--BREAKING-- iteration {} > {}".format(self.iteration_count, self._iteration_limit))
+                    log.info("--STOPPING EPISODE -- iteration {} > limit {}".format(self.iteration_count, self._iteration_limit))
                     break
 
-         # renderif not headless
-         #   if not self._headless:
-         #       if 'human' in self._env.metadata['render.modes']:
-         #           self._env.render()
+         # render if not headless
+            if not self._headless:
+                if 'human' in self._env.metadata['render.modes']:
+                    self._env.render()
 
-        # print a periodic status of iterations and episodes
-        self._periodic_status_update()
+        # log a periodic status of iterations and episodes
+        self.periodic_status_update()
 
         reward = rwd_accum / (i + 1)
 
         # convert state and return to the server
         state_after_simulation = self.gym_to_state(observation)
 
-        log.debug("simulation returning observation {}".format(
-            state_after_simulation))
+        log.debug("simulation returning state {}".format(state_after_simulation))
 
         return state_after_simulation, reward, done
 
-    def episode_step(self, action: Dict[str, Any]):
-        log.debug("-- EPISODE STEP {}-- - command {}".format(self.iteration_count, action))
+    def episode_step(self, action: Dict[str, Any]) -> None :
+        """Increases the iteration count and run a simulation for given actions
+        """
+        log.debug("-- EPISODE STEP {}-- - action {}".format(self.iteration_count, action))
+        
         self.iteration_count += 1
         self.simulate(action)
+        
         log.debug("-------------------------------------")
 
-    def episode_finish(self, reason: str):
+    def episode_finish(self, reason: str) -> None:
+        """ Called when the episode has finished
+        """
         log.info("-- EPISODE FINISH --")
         log.info("-- iteration {} episode {} reward {} reason {}".format(
             self.iteration_count, self.episode_count, self.episode_reward, reason))
+
         self._last_status = time()
         self.episode_count += 1
+        self.finished = True
 
-    def standby(self, reason):
-        """ report standby messages from the server
-        """
-        log.info('standby: {}'.format(reason))
-        sleep(1)
-        return True
-
-    def run_gym(self):
-        """ runs the simulation until cancelled or finished
-        """
-        while self.run():
-            continue
-
-        # success
-        log.info('Finished running the simulator')
-
-    def _periodic_status_update(self):
-        """ print a periodic status update showing iterations/sec
+    def periodic_status_update(self) -> None:
+        """ Logs a periodic status update showing current reward
+            Useful when logging level is set to info and 
+            we don't want to see the logs for each step
         """
         if time() - self._last_status > self._log_interval:
             log.info("Episode {} is still running, reward so far is {}".format(
                      self.episode_count, self.episode_reward))
             self._last_status = time()
 
-    def halted(self):
+    def halted(self) -> bool:
+        """ Returns True if the simulator has finished the episode
+        """
         return self.finished
 
     def get_interface(self) -> Dict[str, Any]:
+        """ Reads the content of the simulator_interface.json file 
+            and converts it to a dictionary of values
+
+            Override it in derived class to use non-generic file name
+        """ 
         interface_file_path ="simulator_interface.json"
         
         with open(interface_file_path) as file:
             interface = json.load(file)
         return interface
 
-    def _parse_arguments(self):
-        """ parses command line arguments and returns them as a list
+    def parse_arguments(self):
+        """ Parses command line arguments and returns them as a list
         """
         headless_help = (
             "The simulator can be run with or without the graphical "
@@ -224,6 +217,6 @@ class GymSimulator():
         try:
             args, unknown = parser.parse_known_args()
         except SystemExit:
-            print('')
+            log.error('An error occured while trying to parse the args')
             return None
         return args
