@@ -25,4 +25,4 @@ COPY envs/classic_controls/Pendulum/pendulum.py \
 
 
 # This will be the command to run the simulator
-CMD ["python", "pendulum.py", "--verbose"]
+CMD ["python", "pendulum.py", "--headless", "--verbose"]

@@ -113,7 +113,7 @@ class GymSimulator:
         #convert the Bonsai actions to openai environemnt action type 
         gym_action = self.action_to_gym(action)
         
-        log.debug('simulating - gym action {}   state {}'.format(gym_action, self._env.unwrapped.state))
+        log.debug('simulating - gym action {}'.format(gym_action))
 
         rwd_accum = 0
         done = False
