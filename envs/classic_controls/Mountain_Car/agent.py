@@ -1,32 +1,25 @@
-import argparse
-import sys
-
-import gym
-from gym import wrappers, logger
+import logging
 import requests
+from typing import Any, Dict
+from mountain_car import MountainCar
 
 
 class BonsaiAgent(object):
     """ The agent that gets the action from the trained brain exported as docker image and started locally
     """
 
-    def __init__(self, action_space):
-        self.action_space = action_space
+    def act(self, state) -> Dict[str, Any]:
+        action = self.predict(state)
+        action["command"] = int(action["command"])
+        return action
 
-    def act(self, observation, reward, done):
-        action = self.predict(observation[0], observation[1])
-        return action["command"]
-
-    def predict(self,
-                position: float,
-                speed: float,) -> dict:
+    def predict(self, state):
+        #local endpoint when running trained brain locally in docker container
         url = "http://localhost:5000/v1/prediction"
-        state = {
-            "position": position,
-            "speed": speed
-        }
+
         response = requests.get(url, json=state)
         action = response.json()
+
         return action
 
 
@@ -41,29 +34,38 @@ class RandomAgent(object):
 
 
 if __name__ == '__main__':
-    # You can set the level to logger.DEBUG or logger.WARN if you
-    # want to change the amount of output.
-    logger.set_level(logger.INFO)
+    logging.basicConfig()
+    log = logging.getLogger("mountain-car")
+    log.setLevel(level='INFO')
 
-    env = gym.make("MountainCar-v0")
-
-    env.seed(0)
+    # we will use our environment (wrapper of OpenAI env)
+    mountain_car = MountainCar()
 
     # specify which agent you want to use, 
     # BonsaiAgent that uses trained Brain or
     # RandomAgent that randomly selects next action
-    agent = BonsaiAgent(env.action_space)
+    agent = BonsaiAgent()
 
     episode_count = 100
-    reward = 0
-    done = False
 
-    for i in range(episode_count):
-        ob = env.reset()
-        while True:
-            action = agent.act(ob, reward, done)
-            ob, reward, done, _ = env.step(int(action))
-            env.render()
-            if done:
-                break
-    env.close()
+    try:
+        for i in range(episode_count):
+            #start a new episode and get the new state
+            mountain_car.episode_start()
+            state = mountain_car.get_state()
+
+            while True:
+                #get the action from the agent (based on the current state)
+                action = agent.act(state)
+
+                #do the next step of the simulation and get the new state
+                mountain_car.episode_step(action)
+                state = mountain_car.get_state()
+
+                if mountain_car.halted():
+                    break
+
+            mountain_car.episode_finish("")
+
+    except KeyboardInterrupt:
+        print("Stopped")

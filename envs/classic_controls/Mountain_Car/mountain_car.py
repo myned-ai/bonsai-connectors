@@ -3,6 +3,7 @@ from typing import Any, Dict
 
 from gym_connectors import BonsaiConnector, GymSimulator
 
+log = logging.getLogger("mountain-car")
 
 class MountainCar(GymSimulator):
     """ Implements the methods specific to Open AI Gym Pendulum environment 

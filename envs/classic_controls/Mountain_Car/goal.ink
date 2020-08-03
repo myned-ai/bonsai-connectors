@@ -4,7 +4,6 @@
 inkling "2.0"
 
 using Goal
-using Number
 using Math
 
 # Type that represents the per-iteration state returned by simulator
