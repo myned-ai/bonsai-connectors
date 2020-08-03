@@ -17,12 +17,14 @@ Full documentation for Bonsai's Platform can be found at https://docs.bons.ai.
 
 ## Set-Up
 
-Bonsai need two environment variables set to be able to attach to the platform.
+You will need to create an account with Microsoft Bonsai.
+Follow instructions: https://docs.microsoft.com/en-us/bonsai/guides/account-setup
 
-The first is **SIM_ACCESS_KEY**. You can create one from the Account Settings page.
-The second is **SIM_WORKSPACE**. You can find this in the URL after ***/workspaces/*** once you are logged in to the platform.
+Bonsai Gym requires two environment variables to be set to be able to connect to Microsoft Bonsai:
 
+**SIM_ACCESS_KEY**. You can create one from the Account Settings page.
 
+**SIM_WORKSPACE**. You can find this in the URL after ***/workspaces/*** once you are logged in to the platform.
 
 You will need to install support libraries prior to running locally.
 Our environment depend on **microsoft_bonsai_api** package and on **gym_connectors** from this codebase.
@@ -32,6 +34,43 @@ cd connectors
 pip3 install .
 pip3 install microsoft_bonsai_api
 ```
+
+### Building Dockerfile
+
+Clone the repo and go into the created folder and select an environment, e.g:
+
+```
+cd ./envs/classic_controls/Pendulum
+```
+
+From the root of the selected environment run:
+
+```
+docker build -t <IMAGE_NAME> -f Dockerfile ../../../
+```
+
+### Push to ACR
+Run the following code to push to ACR:
+
+```
+az login
+az acr login --subscription <SUBSCRIPTION_ID> --name <ACR_REGISTRY_NAME>
+docker tag <IMAGE_NAME> <ACR_REGISTRY_NAME>.azurecr.io/bonsai/<IMAGE_NAME>
+docker push <ACR_REGSITRY_NAME>.azurecr.io/bonsai/<IMAGE_NAME>
+```
+
+### Create Simulator in Bonsai
+Once you have pushed your image to ACR you can create a simulator by clicking ***Add Sim*** from the left hand navigation. Enter the ACR URL of the image and add a name.
+
+### Create Brain in Bonsai
+You can create a brain by clicking ***Create brain*** from the left hand navigation. Select ***Empty Brain*** add a name and after it has been created, copy the contents of the .ink file from the selected environment and paste them on the ***Teach*** section of the brain. Click the train button and select the simulator, from the presented list, that you have created on the previous step.
+
+### Running Local Agent
+When you are satisfied with the training progress, stop the training and export the brain.
+Run the presented code to download locally the exported image.
+
+Start the agent.py located on the root of your selected environment.
+The Open AI visualiser of your selected environment will start.
 
 ## Environments
 
@@ -56,9 +95,9 @@ Reward function:
 function GetReward(State: SimState, Action: SimAction) {
     var u = Action.command
     var th = Math.ArcCos(State.cos_theta)
-    var rew = ((((th + Math.Pi) % (2 * Math.Pi)) - Math.Pi) ** 2) + 0.1 * (State.angular_velocity ** 2) + 0.001 * (u ** 2)
+    var cost = ((((th + Math.Pi) % (2 * Math.Pi)) - Math.Pi) ** 2) + 0.1 * (State.angular_velocity ** 2) + 0.001 * (u ** 2)
 
-    return -rew
+    return -cost
 }
 ```
 Alternative Goal statement:
@@ -117,9 +156,9 @@ We have trained the agent using two  goal statements.
 ```
 goal (State: SimState) {
     avoid `Fall Over`:
-        Math.Abs(State.pole_angle) in Goal.RangeAbove(0.15) # 0.15 is 0.05 less than the maximum angle of pole in radians before it has fallen
+        Math.Abs(State.pole_angle) in Goal.RangeAbove(0.15)
     avoid `Out Of Range`:
-        Math.Abs(State.cart_position) in Goal.RangeAbove(1.4) # 1.4 reduces the space the cartpole is allowed to move while balancing
+        Math.Abs(State.cart_position) in Goal.RangeAbove(1.4)
 }
 ```
 
