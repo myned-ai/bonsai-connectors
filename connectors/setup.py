@@ -30,6 +30,8 @@ setup(
         'wheel>=0.31.0',
         'requests>=2.18',
         'jsons==1.0.0',
+        'aiohttp==2.3.10',
+        'microsoft-bonsai-api==0.1.1'
     ],
     python_requires='>=3.6',
     packages=find_packages(),

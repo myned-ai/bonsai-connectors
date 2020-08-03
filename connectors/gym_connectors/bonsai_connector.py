@@ -3,8 +3,8 @@ import logging
 import time
 from typing import Any, Dict
 
-from microsoft_bonsai_api.client import BonsaiClient, BonsaiClientConfig
-from microsoft_bonsai_api.simulator.models import (SimulatorInterface,
+from microsoft_bonsai_api.simulator.client import BonsaiClient, BonsaiClientConfig
+from microsoft_bonsai_api.simulator.generated.models import (SimulatorInterface,
                                                    SimulatorState)
 
 log = logging.getLogger("BonsaiConnector")
@@ -95,7 +95,6 @@ class BonsaiConnector:
                 # Advance by the new state depending on the event type
 
                 simulator_state = SimulatorState(
-                    session_id = session.session_id,
                     sequence_id =sequence_id, 
                     state = self.get_state(),
                     halted = self.halted()

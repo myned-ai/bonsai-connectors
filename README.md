@@ -71,7 +71,7 @@ goal (State: SimState) {
 
 - Bonsai training output:
 
-![Alt Text](assets/pendulum_bonsai_training.jpg)
+![Alt Text](assets/pendulum.jpg)
 
 - Exported agent (brain) performance:
 
@@ -101,6 +101,35 @@ goal (State: SimState) {
 - Exported agent (brain) performance:
 
 ![Alt Text](assets/mountain_car.gif)
+
+#### 3. Cart Pole
+
+A pole is attached by an un-actuated joint to a cart, which moves along
+a frictionless track. The pendulum starts upright, and the goal is to
+prevent it from falling over by increasing and reducing the cart's
+velocity.
+
+This environment corresponds to the version of the cart-pole problem
+described by Barto, Sutton, and Anderson
+
+We have trained the agent using two  goal statements.
+
+```
+goal (State: SimState) {
+    avoid `Fall Over`:
+        Math.Abs(State.pole_angle) in Goal.RangeAbove(0.15) # 0.15 is 0.05 less than the maximum angle of pole in radians before it has fallen
+    avoid `Out Of Range`:
+        Math.Abs(State.cart_position) in Goal.RangeAbove(1.4) # 1.4 reduces the space the cartpole is allowed to move while balancing
+}
+```
+
+- Bonsai training output:
+
+![Alt Text](assets/cart_pole.jpg)
+
+- Exported agent (brain) performance:
+
+![Alt Text](assets/cart_pole.gif)
 
 ### PyBullet
 

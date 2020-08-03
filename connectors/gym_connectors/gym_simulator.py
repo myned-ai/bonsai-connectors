@@ -32,6 +32,7 @@ class GymSimulator:
         self.finished = False
         self.episode_count = 0
         self.episode_reward = 0
+        self.last_reward = 0
         self.iteration_count = 0
 
         # parse optional command line arguments
@@ -78,7 +79,7 @@ class GymSimulator:
 
         return observation
 
-    def episode_start(self, config: Dict[str, Any]) -> None:
+    def episode_start(self, config: Dict[str, Any] = None) -> None:
         """ Called at the start of each new episode
             Initializes the iteration count, reward, finished variables 
             and the initial state of the simulator (environment)
@@ -87,14 +88,16 @@ class GymSimulator:
             its value would be used to limit the iteration count in this episode
         """
         log.info("- - - - - - - - - - - - - - - - - - -- - - - - -- ")
-        log.info("--EPISODE {} START-- ".format(self.episode_count))
+        log.info("-- EPISODE {} START-- ".format(self.episode_count))
 
-        self._iteration_limit = config.get(
-            "episode_iteration_limit", self._iteration_limit)
+        if config is not None:
+            self._iteration_limit = config.get(
+                "episode_iteration_limit", self._iteration_limit)
 
         self.finished = False
         self.iteration_count = 0
         self.episode_reward = 0
+        self.last_reward = 0
 
         # reset the environment and set the initial observation
         observation = self.gym_episode_start(config)
@@ -115,6 +118,7 @@ class GymSimulator:
         
         log.debug('simulating - gym action {}'.format(gym_action))
 
+        reward = 0
         rwd_accum = 0
         done = False
         i = 0
@@ -150,8 +154,8 @@ class GymSimulator:
         state_after_simulation = self.gym_to_state(observation)
 
         log.debug("simulation returning state {}".format(state_after_simulation))
-
-        return state_after_simulation, reward, done
+        
+        self.last_reward = reward
 
     def episode_step(self, action: Dict[str, Any]) -> None :
         """Increases the iteration count and run a simulation for given actions
@@ -166,7 +170,8 @@ class GymSimulator:
     def episode_finish(self, reason: str) -> None:
         """ Called when the episode has finished
         """
-        log.info("-- EPISODE FINISH --")
+        log.info("- - - - - - - - - - - - - - - - - - -- - - - - -- ")
+        log.info("-- EPISODE {} FINISH --". format(self.episode_count))
         log.info("-- iteration {} episode {} reward {} reason {}".format(
             self.iteration_count, self.episode_count, self.episode_reward, reason))
 
@@ -183,6 +188,11 @@ class GymSimulator:
             log.info("Episode {} is still running, reward so far is {}".format(
                      self.episode_count, self.episode_reward))
             self._last_status = time()
+
+    def get_last_reward(self):
+        """ Returns the value of the last reward in the current episode
+        """
+        return self.last_reward
 
     def halted(self) -> bool:
         """ Returns True if the simulator has finished the episode
