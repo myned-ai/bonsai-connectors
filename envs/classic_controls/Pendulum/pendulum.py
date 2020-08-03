@@ -4,6 +4,8 @@ from typing import Any, Dict
 import numpy as np
 from gym_connectors import BonsaiConnector, GymSimulator
 
+log = logging.getLogger("pendulum")
+
 class Pendulum(GymSimulator):
     """ Implements the methods specific to Open AI Gym Pendulum environment 
     """    
@@ -40,6 +42,9 @@ class Pendulum(GymSimulator):
 
             config parameter is passed from an inkling lesson and can contain initial state
         """
+        if config is None:
+             config:Dict[str,Any] = {}
+
         super().gym_episode_start(config)
 
         #get the initial angle and angular velocity from config, 

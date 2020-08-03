@@ -1,30 +1,24 @@
-import gym
-from gym import logger
+import logging
 import requests
-
+from typing import Any, Dict
+from pendulum import Pendulum
 
 class BonsaiAgent(object):
     """ The agent that gets the action from the trained brain exported as docker image and started locally
     """
-    def __init__(self, action_space):
-        self.action_space = action_space
 
-    def act(self, observation, reward, done):
-        action = self.predict(observation[0], observation[1], observation[2])
-        return [action["command"]]
+    def act(self, state) -> Dict[str, Any]:
+        action = self.predict(state)
 
-    def predict(self,
-                cos_theta: float,
-                sin_theta: float,
-                angular_velocity: float) -> dict:
+        return action
+
+    def predict(self, state):
+        #local endpoint when running trained brain locally in docker container
         url = "http://localhost:5000/v1/prediction"
-        state = {
-            "cos_theta": cos_theta,
-            "sin_theta": sin_theta,
-            "angular_velocity": angular_velocity
-        }
+
         response = requests.get(url, json=state)
         action = response.json()
+
         return action
 
 
@@ -39,32 +33,38 @@ class RandomAgent(object):
 
 
 if __name__ == '__main__':
-    # You can set the level to logger.DEBUG or logger.WARN if you
-    # want to change the amount of output.
-    logger.set_level(logger.INFO)
+    logging.basicConfig()
+    log = logging.getLogger("pendulum")
+    log.setLevel(level='INFO')
 
-    env = gym.make('Pendulum-v0')
-
-    env.seed(0)
+    pendulum = Pendulum()
 
     # specify which agent you want to use, 
     # BonsaiAgent that uses trained Brain or
     # RandomAgent that randomly selects next action
-    agent = BonsaiAgent(env.action_space)
-
-    env.render()
-    env.reset()
+    agent = BonsaiAgent()
 
     episode_count = 100
-    reward = 0
-    done = False
 
-    for i in range(episode_count):
-        ob = env.reset()
-        while True:
-            action = agent.act(ob, reward, done)
-            ob, reward, done, _ = env.step(action)
-            env.render()
-            if done:
-                break
-    env.close()
+
+    try:
+        for i in range(episode_count):
+            #start a new episode and get the new state
+            pendulum.episode_start()
+            state = pendulum.get_state()
+
+            while True:
+                #get the action from the agent (based on the current state)
+                action = agent.act(state)
+
+                #do the next step of the simulation and get the new state
+                pendulum.episode_step(action)
+                state = pendulum.get_state()
+
+                if pendulum.halted():
+                    break
+
+            pendulum.episode_finish("")
+
+    except KeyboardInterrupt:
+        print("Stopped")
