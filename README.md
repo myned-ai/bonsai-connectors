@@ -1,12 +1,14 @@
 # Bonsai Gym
 
-Bonsai Gym is an open-source interface library, which gives us access to OpenAI Gym standardised set of environments while using Microsoft Bonsai platform.
+Bonsai Gym is an open-source library, which gives us access to OpenAI Gym standardised set of environments while using Microsoft's reinforcement learning platform Bonsai.
+
+The repository also contains examples how to use this library to build and deploy OpenAI Gym environments to Bonsai and how to interact with the trained agent (Brain) from your code.  
 
 ## Basics
 
-There are two basic concepts in reinforcement learning: the environment (namely, the outside world) and the agent (namely, the algorithm you are writing). The agent sends actions to the environment, and the environment replies with observations and rewards (that is, a score).
+There are two basic concepts in reinforcement learning: the environment (namely, the outside world) and the agent (the algorithm you are writing). The agent sends actions to the environment, and the environment replies with observations and rewards (that is, a score).
 
-OpenAI Gym is a toolkit for developing and comparing reinforcement learning algorithms. The gym open-source library, gives us access to a standardised set of environments. Environments come as is with no predefined agent.
+OpenAI Gym is a toolkit for developing simulations and comparing reinforcement learning algorithms. The Gym open-source library gives us access to a standardised set of environments. Environments come as is with no predefined agent.
 
 Link to Open AI environments: https://github.com/openai
 
@@ -22,7 +24,7 @@ Follow instructions: https://docs.microsoft.com/en-us/bonsai/guides/account-setu
 
 Bonsai Gym requires two environment variables to be set to be able to connect to Microsoft Bonsai:
 
-**SIM_ACCESS_KEY**. You can create one from the Account Settings page.
+**SIM_ACCESS_KEY**. You can copy it from the Account Settings page.
 
 **SIM_WORKSPACE**. You can find this in the URL after ***/workspaces/*** once you are logged in to the platform.
 
@@ -36,6 +38,7 @@ pip3 install microsoft_bonsai_api
 ```
 
 ### Building Dockerfile
+To upload and use the simulator from Azure, you need to push it as a docker image to Azure Container Registry.
 
 Clone the repo and go into the created folder and select an environment, e.g:
 
@@ -60,17 +63,17 @@ docker push <ACR_REGSITRY_NAME>.azurecr.io/bonsai/<IMAGE_NAME>
 ```
 
 ### Create Simulator in Bonsai
-Once you have pushed your image to ACR you can create a simulator by clicking ***Add Sim*** from the left hand navigation. Enter the ACR URL of the image and add a name.
+Once you have pushed your docker image to ACR, you can create a simulator by clicking ***Add Sim*** from the left hand side navigation menu. Enter the ACR URL of the image and name it.
 
 ### Create Brain in Bonsai
-You can create a brain by clicking ***Create brain*** from the left hand navigation. Select ***Empty Brain*** add a name and after it has been created, copy the contents of the .ink file from the selected environment and paste them on the ***Teach*** section of the brain. Click the train button and select the simulator, from the presented list, that you have created on the previous step.
+You can create a brain by clicking ***Create brain*** from the left hand side navigation menu. Select ***Empty Brain***, add a name and after it has been created, copy the contents of the .ink file from the selected environment (folder) and paste them to the ***Teach*** section of the brain. Click the train button and from the presented list select the simulator you have created in the previous step.
 
 ### Running Local Agent
 When you are satisfied with the training progress, stop the training and export the brain.
-Run the presented code to download locally the exported image.
+Run the presented code to download the exported docker image locally.
 
 Start the agent.py located on the root of your selected environment.
-The Open AI visualiser of your selected environment will start.
+The Open AI visualiser of your selected environment will start and you will see how well your trained brain 'behaves'.
 
 ## Environments
 
@@ -93,9 +96,9 @@ We have trained the agent using a reward function, although a goal statement pro
 Reward function:
 ```
 function GetReward(State: SimState, Action: SimAction) {
-    var u = Action.command
-    var th = Math.ArcCos(State.cos_theta)
-    var cost = ((((th + Math.Pi) % (2 * Math.Pi)) - Math.Pi) ** 2) + 0.1 * (State.angular_velocity ** 2) + 0.001 * (u ** 2)
+    var cmd = Action.command   #the value of the last command
+    var theta = Math.ArcCos(State.cos_theta)   
+    var cost = ((((theta + Math.Pi) % (2 * Math.Pi)) - Math.Pi) ** 2) + 0.1 * (State.angular_velocity ** 2) + 0.001 * (cmd ** 2)
 
     return -cost
 }
@@ -103,7 +106,7 @@ function GetReward(State: SimState, Action: SimAction) {
 Alternative Goal statement:
 ```
 goal (State: SimState) {
-    drive `cos upwards`:
+    drive `upwards`:
         State.cos_theta in Goal.Range(0.707, 1.0)
 }
 ```
