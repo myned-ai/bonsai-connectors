@@ -14,7 +14,7 @@ class BonsaiAgent(object):
         return action
 
     def predict(self, state):
-        #local endpoint when running trained brain locally in docker container
+        # local endpoint when running trained brain locally in docker container
         url = "http://localhost:5000/v1/prediction"
 
         response = requests.get(url, json=state)
@@ -29,7 +29,7 @@ class RandomAgent(object):
     def __init__(self, action_space):
         self.action_space = action_space
 
-    def act(self, observation, reward, done):
+    def act(self):
         return self.action_space.sample()
 
 
@@ -41,30 +41,27 @@ if __name__ == '__main__':
     # we will use our environment (wrapper of OpenAI env)
     ant = Ant()
 
-
-    # specify which agent you want to use, 
+    # specify which agent you want to use,
     # BonsaiAgent that uses trained Brain or
     # RandomAgent that randomly selects next action
-    agent = BonsaiAgent()
+    agent = RandomAgent(ant._env.action_space)
 
     ant._env.render()
     ant._env.reset()
-
-    
 
     episode_count = 100
 
     try:
         for i in range(episode_count):
-            #start a new episode and get the new state
+            # start a new episode and get the new state
             ant.episode_start()
             state = ant.get_state()
 
             while True:
-                #get the action from the agent (based on the current state)
+                # get the action from the agent (based on the current state)
                 action = agent.act(state)
 
-                #do the next step of the simulation and get the new state
+                # do the next step of the simulation and get the new state
                 ant.episode_step(action)
                 state = ant.get_state()
 

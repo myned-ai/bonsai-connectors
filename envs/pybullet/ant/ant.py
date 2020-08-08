@@ -9,6 +9,7 @@ from gym_connectors import BonsaiConnector, GymSimulator
 
 log = logging.getLogger("ant")
 
+
 class Ant(GymSimulator):
     """ Implements the methods specific to Ant environment
     """
@@ -52,13 +53,14 @@ class Ant(GymSimulator):
         log.debug('get_state: {}'.format(self.bonsai_state))
         return self.bonsai_state
 
+
 if __name__ == "__main__":
     """ Creates a Pendulum environment, passes it to the BonsaiConnector 
         that connects to the Bonsai service that can use it as a simulator  
     """
     logging.basicConfig()
     log = logging.getLogger("ant")
-    log.setLevel(level='INFO')
+    log.setLevel(level='DEBUG')
 
     # TO DO: Issue With Uncommending The DEBUG on Reacher Environmnet
     # Bonsai returns: INFO:BonsaiConnector:Unregistered simulator because: 'ReacherBulletEnv' object has no attribute 'state'
