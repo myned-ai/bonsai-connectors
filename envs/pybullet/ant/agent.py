@@ -61,8 +61,8 @@ if __name__ == '__main__':
             # while True:
             # get the action from the agent (based on the current state)
             # action = agent.act(state)
-            action = {"j1": 1.0, "j2": 1.0, "j3": 0.0, "j4": 0.0,
-                      "j5": 1.0, "j6": 1.0, "j7": 0.0, "j8": 0.0}
+            action = {"j1": 0.0, "j2": 1.0, "j3": 0.0, "j4": 0.0,
+                      "j5": 0.0, "j6": 1.0, "j7": 0.0, "j8": 0.0}
 
             # do the next step of the simulation and get the new state
             ant.episode_step(action)
