@@ -44,7 +44,7 @@ if __name__ == '__main__':
     # specify which agent you want to use,
     # BonsaiAgent that uses trained Brain or
     # RandomAgent that randomly selects next action
-    agent = RandomAgent(ant._env.action_space)
+    agent = BonsaiAgent()
 
     ant._env.render()
     ant._env.reset()
