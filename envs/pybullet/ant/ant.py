@@ -5,12 +5,12 @@ import gym
 import pybulletgym
 
 import numpy as np
-from gym_connectors import BonsaiConnector, GymSimulator
+from gym_connectors import BonsaiConnector, PyBulletSimulator
 
 log = logging.getLogger("ant")
 
 
-class Ant(GymSimulator):
+class Ant(PyBulletSimulator):
     """ Implements the methods specific to Ant environment
     """
 
