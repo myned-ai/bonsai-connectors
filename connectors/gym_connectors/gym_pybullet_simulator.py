@@ -25,12 +25,13 @@ class PyBulletSimulator(GymSimulator):
     environment_name = ''  # name of the OpenAI Gym environment specified in derived class
 
     def __init__(self, iteration_limit=200, skip_frame=1):
-        """ Initializes the GymSimulator object
+        """ Initializes the PyBulletSimulator object
         """
         super().__init__(iteration_limit, skip_frame)
 
-    def make_environemnt(self, headless):
-
+    def make_environment(self, headless):
+        log.debug("Making PyBullet environment {}...".format(self.environment_name))
         self._env = gym.make(self.environment_name)
         if not headless:
             self._env.render()
+            self._env.reset()

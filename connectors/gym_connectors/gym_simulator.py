@@ -54,7 +54,7 @@ class GymSimulator:
         self._log_interval = 10.0  # seconds
         self._last_status = time()
 
-    def make_environemnt(self, headless):
+    def make_environment(self, headless):
 
         self._env = gym.make(self.environment_name)
 
