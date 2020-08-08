@@ -6,6 +6,7 @@ from time import sleep, time
 from typing import Any, Dict
 
 import gym
+import pybulletgym
 
 log = logging.getLogger("GymSimulator")
 log.setLevel(level='INFO')
@@ -54,6 +55,7 @@ class GymSimulator:
         self._log_interval = 10.0  # seconds
         self._last_status = time()
 
+   
     def gym_to_state(self, observation) -> None:
         """Convert an openai environment observation into an Bonsai state
 
