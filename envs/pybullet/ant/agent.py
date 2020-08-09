@@ -20,6 +20,7 @@ class BonsaiAgent(object):
         response = requests.get(url, json=state)
         action = response.json()
 
+        print(action)
         return action
 
 
@@ -58,15 +59,15 @@ if __name__ == '__main__':
             state = ant.get_state()
 
             while True:
-                # get the action from the agent (based on the current state)
+            # get the action from the agent (based on the current state)
                 action = agent.act(state)
 
-                # do the next step of the simulation and get the new state
+            # do the next step of the simulation and get the new state
                 ant.episode_step(action)
                 state = ant.get_state()
 
                 if ant.halted():
-                    break
+                   break
 
             ant.episode_finish("")
 
