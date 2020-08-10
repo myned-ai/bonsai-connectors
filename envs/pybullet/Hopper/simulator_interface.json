@@ -1,0 +1,44 @@
+{
+  "name": "hopper_simulator",
+  "timeout": 60,
+  "description": {
+    "config": {
+      "category": "Struct",
+      "fields": []
+    },
+    "action": {
+      "category": "Struct",
+      "fields": [
+        {
+          "name": "j1",
+          "type": {
+            "category": "Array"
+          }
+        },
+        {
+          "name": "j2",
+          "type": {
+            "category": "Array"
+          }
+        },
+        {
+          "name": "j3",
+          "type": {
+            "category": "Array"
+          }
+        }
+      ]
+    },
+    "state": {
+      "category": "Struct",
+      "fields": [
+        {
+          "name": "obs",
+          "type": {
+            "category": "Array"
+          }
+        }
+      ]
+    }
+  }
+}
