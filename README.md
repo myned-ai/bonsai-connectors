@@ -57,7 +57,7 @@ Run the following code to push to ACR:
 
 ```
 az login
-az acr login --subscription 09ad80b2-f9eb-414d-991f-0bcdec1616f7 --name bonsaitest4
+az acr login --subscription <SUBSCRIPTION_ID> --name <ACR_REGISTRY_NAME>
 docker tag <IMAGE_NAME> <ACR_REGISTRY_NAME>.azurecr.io/bonsai/<IMAGE_NAME>
 docker push <ACR_REGSITRY_NAME>.azurecr.io/bonsai/<IMAGE_NAME>
 ```
