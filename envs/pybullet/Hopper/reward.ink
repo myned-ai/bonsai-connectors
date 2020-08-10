@@ -38,17 +38,19 @@ graph (input: ObservableState): SimAction {
             source simulator (Action: SimAction,Config: SimConfig): SimState {
             }
             algorithm {
-                Algorithm : "PPO"
+                Algorithm : "PPO",
+                BatchSize : 2500,
+                PolicyLearningRate:0.006
             }
             reward GetReward
 
             training {
-                EpisodeIterationLimit: 500,
+                EpisodeIterationLimit: 1000,
                 TotalIterationLimit: 200000000
             }
             lesson walking{
               scenario {
-                    episode_iteration_limit: 500
+                    episode_iteration_limit: 1000
                 }
             }
         }

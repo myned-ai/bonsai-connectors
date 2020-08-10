@@ -39,7 +39,7 @@ class Hopper(PyBulletSimulator):
         j2 = action['j2']
         j3 = action['j3']
 
-        # Reacher environment expects an array of actions
+        # Hopper environment expects an array of actions
         return [j1, j2, j3]
 
     def get_state(self) -> Dict[str, Any]:
@@ -57,8 +57,8 @@ if __name__ == "__main__":
     log = logging.getLogger("hopper")
     log.setLevel(level='DEBUG')
 
-    # TO DO: Issue With Uncommending The DEBUG on Reacher Environmnet
-    # Bonsai returns: INFO:BonsaiConnector:Unregistered simulator because: 'ReacherBulletEnv' object has no attribute 'state'
+    # TO DO: Issue With Uncommending The DEBUG on Hopper Environmnet
+    # Bonsai returns: INFO:BonsaiConnector:Unregistered simulator because: 'HopperBulletEnv' object has no attribute 'state'
 
     # if more information is needed, uncomment this
     # gymlog = logging.getLogger("GymSimulator")
