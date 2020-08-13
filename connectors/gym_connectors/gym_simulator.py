@@ -98,6 +98,10 @@ class GymSimulator:
             self._iteration_limit = config.get(
                 "episode_iteration_limit", self._iteration_limit)
 
+        if config is not None:
+            self._skip_frame = config.get(
+                "skip_frame", self._skip_frame)        
+
         self.finished = False
         self.iteration_count = 0
         self.episode_reward = 0
@@ -187,6 +191,7 @@ class GymSimulator:
         self.episode_count += 1
         self.finished = True
 
+
     def periodic_status_update(self) -> None:
         """ Logs a periodic status update showing current reward
             Useful when logging level is set to info and 
@@ -201,6 +206,11 @@ class GymSimulator:
         """ Returns the value of the last reward in the current episode
         """
         return self.last_reward
+
+    def get_episode_reward(self):
+        """ Returns the value of the cummulative reward in the current episode
+        """
+        return self.episode_reward    
 
     def halted(self) -> bool:
         """ Returns True if the simulator has finished the episode

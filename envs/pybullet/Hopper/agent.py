@@ -26,10 +26,10 @@ class BonsaiAgent(object):
 if __name__ == '__main__':
     logging.basicConfig()
     log = logging.getLogger("hopper")
-    log.setLevel(level='INFO')
+    log.setLevel(level='DEBUG')
 
     # we will use our environment (wrapper of OpenAI env)
-    hopper = Hopper(iteration_limit=500)
+    hopper = Hopper(iteration_limit=200)
 
     # specify which agent you want to use,
     # BonsaiAgent that uses trained Brain or

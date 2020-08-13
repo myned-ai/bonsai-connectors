@@ -1,8 +1,6 @@
 import logging
 from typing import Any, Dict
-import json
-import gym
-import pybulletgym
+
 
 import numpy as np
 from gym_connectors import BonsaiConnector, PyBulletSimulator
@@ -21,15 +19,50 @@ class Hopper(PyBulletSimulator):
         """
 
         self.bonsai_state = {"obs": [0.0]}
+        self.prev_body_x : float = None
+        self.prev_body_y : float = None
+        self.prev_body_z : float = None
+        self.prev_potential : float = None
 
         super().__init__(iteration_limit, skip_frame)
 
     def gym_to_state(self, state) -> Dict[str, Any]:
         """ Converts openai environment state to Bonsai state, as defined in inkling
         """
-        self.bonsai_state = {"obs": state.tolist(),
-                             "rew": self.get_last_reward()}
+        x = float(self._env.unwrapped.robot.body_xyz[0])
+        if self.prev_body_x is None:
+            self.prev_body_x = x
 
+        y = float(self._env.unwrapped.robot.body_xyz[1])
+        if self.prev_body_y is None:
+            self.prev_body_y = y
+
+        z = float(self._env.unwrapped.robot.body_xyz[2])
+        if self.prev_body_z is None:
+            self.prev_body_z = z
+
+        potential = float(self._env.unwrapped.potential)
+        if self.prev_potential is None:
+            self.prev_potential = potential
+
+        progress = potential - self.prev_potential
+        
+        self.bonsai_state = {"obs": state.tolist(),
+                             "rew": self.get_last_reward(),
+                             "episode_rew": self.get_episode_reward(),
+                             "body_x": x,
+                             "body_y": y,
+                             "body_z": z,
+                             "prev_body_x": self.prev_body_x,
+                             "prev_body_y": self.prev_body_y,
+                             "prev_body_z": self.prev_body_z,
+                             "progress": progress}
+        
+        self.prev_body_x  = x
+        self.prev_body_y  = y
+        self.prev_body_z  = z
+        self.prev_potential = potential
+        
         return self.bonsai_state
 
     def action_to_gym(self, action: Dict[str, Any]):
@@ -48,6 +81,13 @@ class Hopper(PyBulletSimulator):
         log.debug('get_state: {}'.format(self.bonsai_state))
         return self.bonsai_state
 
+    def episode_start(self, config: Dict[str, Any] = None) -> None:
+        self.prev_body_x : float = None
+        self.prev_body_y : float = None
+        self.prev_body_z : float = None
+        self.prev_potential = None    
+
+        super().episode_start(config)
 
 if __name__ == "__main__":
     """ Creates a Pendulum environment, passes it to the BonsaiConnector 
@@ -55,10 +95,7 @@ if __name__ == "__main__":
     """
     logging.basicConfig()
     log = logging.getLogger("hopper")
-    log.setLevel(level='DEBUG')
-
-    # TO DO: Issue With Uncommending The DEBUG on Hopper Environmnet
-    # Bonsai returns: INFO:BonsaiConnector:Unregistered simulator because: 'HopperBulletEnv' object has no attribute 'state'
+    log.setLevel(level='INFO')
 
     # if more information is needed, uncomment this
     # gymlog = logging.getLogger("GymSimulator")
