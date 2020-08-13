@@ -157,22 +157,12 @@ described by Barto, Sutton, and Anderson
 We have trained the agent using reward function and choosing the algorithm parameters.
 
 ```
-algorithm {
-    Algorithm: "PPO",
-    BatchSize : 5000,
-    PolicyLearningRate:0.001
+goal (State: SimState) {
+    avoid `Fall Over`:
+        Math.Abs(State.pole_angle) in Goal.RangeAbove(0.15)
+    avoid `Out Of Range`:
+        Math.Abs(State.cart_position) in Goal.RangeAbove(1.4)
 }
-
-reward GetReward
-
-training {
-    EpisodeIterationLimit: 1100,
-    TotalIterationLimit: 200000000
-}
-lesson walking{
-    scenario {
-        episode_iteration_limit: 1100
-    }
 ```
 
 - Bonsai training output:
@@ -199,12 +189,22 @@ T Erez, Y Tassa, E Todorov, "Infinite Horizon Model Predictive Control for Nonli
 We have trained the agent using a statements.
 
 ```
-goal (State: SimState) {
-    reach `car position`:
-        State.position in Goal.RangeAbove(0.5)  
-    maximize `speed`:
-        Math.Abs(State.speed) in Goal.Range(0, 0.07)      
+algorithm {
+    Algorithm: "PPO",
+    BatchSize : 5000,
+    PolicyLearningRate:0.001
 }
+
+reward GetReward
+
+training {
+    EpisodeIterationLimit: 1100,
+    TotalIterationLimit: 200000000
+}
+lesson walking{
+    scenario {
+        episode_iteration_limit: 1100
+    }
 ```
 
 - Bonsai training output:
