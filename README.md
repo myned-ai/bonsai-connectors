@@ -154,15 +154,25 @@ velocity.
 This environment corresponds to the version of the cart-pole problem
 described by Barto, Sutton, and Anderson
 
-We have trained the agent using two  goal statements.
+We have trained the agent using reward function and choosing the algorithm parameters.
 
 ```
-goal (State: SimState) {
-    avoid `Fall Over`:
-        Math.Abs(State.pole_angle) in Goal.RangeAbove(0.15)
-    avoid `Out Of Range`:
-        Math.Abs(State.cart_position) in Goal.RangeAbove(1.4)
+algorithm {
+    Algorithm: "PPO",
+    BatchSize : 5000,
+    PolicyLearningRate:0.001
 }
+
+reward GetReward
+
+training {
+    EpisodeIterationLimit: 1100,
+    TotalIterationLimit: 200000000
+}
+lesson walking{
+    scenario {
+        episode_iteration_limit: 1100
+    }
 ```
 
 - Bonsai training output:
@@ -177,7 +187,35 @@ goal (State: SimState) {
 
 Bullet is a physics engine which simulates collision detection, soft and rigid body dynamics.
 
-#### 1. Reacher
+PyBullet Gymperium is an open-source implementation of the OpenAI Gym MuJoCo environments for use with the OpenAI Gym Reinforcement Learning Research Platform in support of open research.
+
+#### 1. Hopper
+
+Make a two-dimensional one-legged robot hop forward as fast as possible.
+The robot model is based on work by Erez, Tassa, and Todorov.
+
+T Erez, Y Tassa, E Todorov, "Infinite Horizon Model Predictive Control for Nonlinear Periodic Tasks", 2011.
+
+We have trained the agent using a statements.
+
+```
+goal (State: SimState) {
+    reach `car position`:
+        State.position in Goal.RangeAbove(0.5)  
+    maximize `speed`:
+        Math.Abs(State.speed) in Goal.Range(0, 0.07)      
+}
+```
+
+- Bonsai training output:
+
+![Alt Text](assets/hopper.jpg)
+
+- Exported agent (brain) performance:
+
+![Alt Text](assets/hopper.gif)
+
+#### 2. Reacher
 **Coming Soon!**
 
 ![Alt Text](assets/reacher.png)

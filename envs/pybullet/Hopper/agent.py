@@ -29,7 +29,7 @@ if __name__ == '__main__':
     log.setLevel(level='DEBUG')
 
     # we will use our environment (wrapper of OpenAI env)
-    hopper = Hopper(iteration_limit=200)
+    hopper = Hopper(iteration_limit=500)
 
     # specify which agent you want to use,
     # BonsaiAgent that uses trained Brain or
