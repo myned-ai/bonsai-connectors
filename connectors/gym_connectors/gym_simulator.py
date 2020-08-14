@@ -4,11 +4,11 @@ import logging
 import os
 from time import sleep, time
 from typing import Any, Dict
-
 import gym
 
 log = logging.getLogger("GymSimulator")
 log.setLevel(level='INFO')
+
 
 class GymSimulator:
     """ GymSimulator class
@@ -27,8 +27,6 @@ class GymSimulator:
         # create the gym environment
         log.info("Creating {} environment".format(self.environment_name))
 
-        self._env = gym.make(self.environment_name)
-
         self.finished = False
         self.episode_count = 0
         self.episode_reward = 0
@@ -40,11 +38,13 @@ class GymSimulator:
         if cli_args is not None:
             self._headless = cli_args.headless
 
+        self.make_environment(self._headless)
+
         # optional parameters for controlling the simulation
-        self._iteration_limit = iteration_limit    
+        self._iteration_limit = iteration_limit
 
         # default is to process every frame
-        self._skip_frame = skip_frame    
+        self._skip_frame = skip_frame
 
         # random seed
         self._env.seed(20)
@@ -53,6 +53,10 @@ class GymSimulator:
         # book keeping for rate status
         self._log_interval = 10.0  # seconds
         self._last_status = time()
+
+    def make_environment(self, headless):
+
+        self._env = gym.make(self.environment_name)
 
     def gym_to_state(self, observation) -> None:
         """Convert an openai environment observation into an Bonsai state
@@ -94,6 +98,10 @@ class GymSimulator:
             self._iteration_limit = config.get(
                 "episode_iteration_limit", self._iteration_limit)
 
+        if config is not None:
+            self._skip_frame = config.get(
+                "skip_frame", self._skip_frame)        
+
         self.finished = False
         self.iteration_count = 0
         self.episode_reward = 0
@@ -113,9 +121,9 @@ class GymSimulator:
     def simulate(self, action):
         """ Do a step of the simulation, optionally rendering the results
         """
-        #convert the Bonsai actions to openai environemnt action type 
+        # convert the Bonsai actions to openai environemnt action type
         gym_action = self.action_to_gym(action)
-        
+
         log.debug('simulating - gym action {}'.format(gym_action))
 
         reward = 0
@@ -128,7 +136,8 @@ class GymSimulator:
             observation, reward, done, info = self.gym_simulate(gym_action)
             self.finished = done
 
-            log.debug('gym_simulate returned observation{} reward {} done {}  info {}'.format(observation, reward, done, info))
+            log.debug('gym_simulate returned observation{} reward {} done {}  info {}'.format(
+                observation, reward, done, info))
 
             self.episode_reward += reward
             rwd_accum += reward
@@ -137,10 +146,11 @@ class GymSimulator:
             if (self._iteration_limit > 0):
                 if (self.iteration_count >= self._iteration_limit):
                     self.finished = True
-                    log.info("--STOPPING EPISODE -- iteration {} > limit {}".format(self.iteration_count, self._iteration_limit))
+                    log.info("--STOPPING EPISODE -- iteration {} > limit {}".format(
+                        self.iteration_count, self._iteration_limit))
                     break
 
-         # render if not headless
+        # render if not headless
             if not self._headless:
                 if 'human' in self._env.metadata['render.modes']:
                     self._env.render()
@@ -153,18 +163,20 @@ class GymSimulator:
         # convert state and return to the server
         state_after_simulation = self.gym_to_state(observation)
 
-        log.debug("simulation returning state {}".format(state_after_simulation))
-        
+        log.debug("simulation returning state {}".format(
+            state_after_simulation))
+
         self.last_reward = reward
 
-    def episode_step(self, action: Dict[str, Any]) -> None :
+    def episode_step(self, action: Dict[str, Any]) -> None:
         """Increases the iteration count and run a simulation for given actions
         """
-        log.debug("-- EPISODE STEP {}-- - action {}".format(self.iteration_count, action))
-        
+        log.debug(
+            "-- EPISODE STEP {}-- - action {}".format(self.iteration_count, action))
+
         self.iteration_count += 1
         self.simulate(action)
-        
+
         log.debug("-------------------------------------")
 
     def episode_finish(self, reason: str) -> None:
@@ -178,6 +190,7 @@ class GymSimulator:
         self._last_status = time()
         self.episode_count += 1
         self.finished = True
+
 
     def periodic_status_update(self) -> None:
         """ Logs a periodic status update showing current reward
@@ -194,6 +207,11 @@ class GymSimulator:
         """
         return self.last_reward
 
+    def get_episode_reward(self):
+        """ Returns the value of the cummulative reward in the current episode
+        """
+        return self.episode_reward    
+
     def halted(self) -> bool:
         """ Returns True if the simulator has finished the episode
         """
@@ -204,9 +222,9 @@ class GymSimulator:
             and converts it to a dictionary of values
 
             Override it in derived class to use non-generic file name
-        """ 
-        interface_file_path ="simulator_interface.json"
-        
+        """
+        interface_file_path = "simulator_interface.json"
+
         with open(interface_file_path) as file:
             interface = json.load(file)
         return interface
