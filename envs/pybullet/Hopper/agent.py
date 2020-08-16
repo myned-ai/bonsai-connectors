@@ -31,6 +31,14 @@ if __name__ == '__main__':
     # we will use our environment (wrapper of OpenAI env)
     hopper = Hopper(iteration_limit=500)
 
+    # setting initial camera position
+    lookat = [0, 0, 0]
+    pitch = -20
+    distance = 2
+    yaw = 10
+    hopper._env.unwrapped._p.resetDebugVisualizerCamera(
+        distance, yaw, pitch, lookat)
+
     # specify which agent you want to use,
     # BonsaiAgent that uses trained Brain or
     # RandomAgent that randomly selects next action
@@ -50,6 +58,7 @@ if __name__ == '__main__':
             while True:
                 # get the action from the agent (based on the current state)
                 action = agent.act(state)
+                hopper._env.unwrapped.camera_adjust()
 
             # do the next step of the simulation and get the new state
                 hopper.episode_step(action)
