@@ -50,7 +50,7 @@ if __name__ == '__main__':
             while True:
                 # get the action from the agent (based on the current state)
                 action = agent.act(state)
-
+                half_cheetah._env.unwrapped.camera_adjust()
             # do the next step of the simulation and get the new state
                 half_cheetah.episode_step(action)
                 state = half_cheetah.get_state()

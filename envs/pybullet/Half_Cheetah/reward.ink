@@ -64,8 +64,8 @@ graph (input: ObservableState): SimAction {
 }
 
 function GetReward(State: SimState, Action: SimAction) {
-    var action_sum = Math.Abs(Action.j1 + Action.j2 + Action.j3 + Action.j4 + Action.j5 + Action.j6)
-    var reward_ctrl = - 0.1 * Math.Sqrt(action_sum)
+    var action_sum = Action.j1 + Action.j2 + Action.j3 + Action.j4 + Action.j5 + Action.j6
+    var reward_ctrl = - 0.1 * (action_sum * action_sum)
     var reward_run = State.progress
     var rew = reward_ctrl + reward_run + State.joints_at_limit_cost
 
