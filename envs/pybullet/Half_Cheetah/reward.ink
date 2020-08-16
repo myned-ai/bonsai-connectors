@@ -2,11 +2,13 @@
 
 inkling "2.0"
 using Number
+using Math
 
 # Type that represents the per-iteration state returned by simulator
 type SimState {
     obs:number<-5.0..5.0>[26],
-    rew:number
+    joints_at_limit_cost:number,
+    progress:number
 }
 
 
@@ -15,7 +17,7 @@ type SimConfig{
 }
 # State that represents the input to the policy
 type ObservableState {
-    obs:number<-5.0..5.0>[15]
+    obs:number<-5.0..5.0>[26]
 }
 
 # Type that represents the per-iteration action accepted by the simulator
@@ -62,5 +64,10 @@ graph (input: ObservableState): SimAction {
 }
 
 function GetReward(State: SimState, Action: SimAction) {
-    return State.rew
+    var action_sum = Math.Abs(Action.j1 + Action.j2 + Action.j3 + Action.j4 + Action.j5 + Action.j6)
+    var reward_ctrl = - 0.1 * Math.Sqrt(action_sum)
+    var reward_run = State.progress
+    var rew = reward_ctrl + reward_run + State.joints_at_limit_cost
+
+    return rew
 }

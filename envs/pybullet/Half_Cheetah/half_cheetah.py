@@ -30,17 +30,10 @@ class HalfCheetah(PyBulletSimulator):
     def gym_to_state(self, state) -> Dict[str, Any]:
         """ Converts openai environment state to Bonsai state, as defined in inkling
         """
-        x = float(self._env.unwrapped.robot.body_xyz[0])
-        if self.prev_body_x is None:
-            self.prev_body_x = x
 
-        y = float(self._env.unwrapped.robot.body_xyz[1])
-        if self.prev_body_y is None:
-            self.prev_body_y = y
+        electricity_cost = float(self._env.unwrapped.electricity_cost)
 
-        z = float(self._env.unwrapped.robot.body_xyz[2])
-        if self.prev_body_z is None:
-            self.prev_body_z = z
+        joints_at_limit_cost = float(self._env.unwrapped.joints_at_limit_cost)
 
         potential = float(self._env.unwrapped.potential)
         if self.prev_potential is None:
@@ -49,19 +42,10 @@ class HalfCheetah(PyBulletSimulator):
         progress = potential - self.prev_potential
 
         self.bonsai_state = {"obs": state.tolist(),
-                             "rew": self.get_last_reward(),
-                             "episode_rew": self.get_episode_reward(),
-                             "body_x": x,
-                             "body_y": y,
-                             "body_z": z,
-                             "prev_body_x": self.prev_body_x,
-                             "prev_body_y": self.prev_body_y,
-                             "prev_body_z": self.prev_body_z,
+                             "electricity_cost": electricity_cost,
+                             "joints_at_limit_cost": joints_at_limit_cost,
                              "progress": progress}
 
-        self.prev_body_x = x
-        self.prev_body_y = y
-        self.prev_body_z = z
         self.prev_potential = potential
 
         return self.bonsai_state
@@ -86,9 +70,7 @@ class HalfCheetah(PyBulletSimulator):
         return self.bonsai_state
 
     def episode_start(self, config: Dict[str, Any] = None) -> None:
-        self.prev_body_x: float = None
-        self.prev_body_y: float = None
-        self.prev_body_z: float = None
+
         self.prev_potential = None
 
         super().episode_start(config)
@@ -106,7 +88,7 @@ if __name__ == "__main__":
     # gymlog = logging.getLogger("GymSimulator")
     # gymlog.setLevel(level='DEBUG')
 
-    half_cheetah = HalfChettah()
+    half_cheetah = HalfCheetah()
     connector = BonsaiConnector(half_cheetah)
 
     while connector.run():

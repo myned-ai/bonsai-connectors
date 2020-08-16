@@ -1,5 +1,5 @@
 {
-  "name": "hopper_simulator",
+  "name": "half-cheetah_simulator",
   "timeout": 60,
   "description": {
     "config": {
@@ -57,49 +57,13 @@
           }
         },
         {
-          "name": "body_x",
+          "name": "electricity_cost",
           "type": {
             "category": "number"
           }
         },
         {
-          "name": "body_y",
-          "type": {
-            "category": "number"
-          }
-        },
-        {
-          "name": "body_z",
-          "type": {
-            "category": "number"
-          }
-        },
-        {
-          "name": "prev_body_x",
-          "type": {
-            "category": "number"
-          }
-        },
-        {
-          "name": "prev_body_y",
-          "type": {
-            "category": "number"
-          }
-        },
-        {
-          "name": "prev_body_z",
-          "type": {
-            "category": "number"
-          }
-        },
-        {
-          "name": "rew",
-          "type": {
-            "category": "number"
-          }
-        },
-        {
-          "name": "episode_rew",
+          "name": "joints_at_limit_cost",
           "type": {
             "category": "number"
           }
