@@ -25,6 +25,12 @@ class Hopper(PyBulletSimulator):
     def gym_to_state(self, state) -> Dict[str, Any]:
         """ Converts openai environment state to Bonsai state, as defined in inkling
         """
+        
+        x = float(self._env.unwrapped.robot.body_xyz[0])
+
+        y = float(self._env.unwrapped.robot.body_xyz[1])
+
+        z = float(self._env.unwrapped.robot.body_xyz[2])
 
         self.bonsai_state = {"obs": state.tolist(),
                              "rew": self.get_last_reward(),
