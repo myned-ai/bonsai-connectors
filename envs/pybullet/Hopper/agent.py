@@ -32,12 +32,7 @@ if __name__ == '__main__':
     hopper = Hopper(iteration_limit=500)
 
     # setting initial camera position
-    lookat = [0, 0, 0]
-    pitch = -20
-    distance = 2
-    yaw = 10
-    hopper._env.unwrapped._p.resetDebugVisualizerCamera(
-        distance, yaw, pitch, lookat)
+    hopper.initialize_camera(distance=2, yaw=10, pitch=-20)
 
     # specify which agent you want to use,
     # BonsaiAgent that uses trained Brain or

@@ -44,8 +44,7 @@ graph (input: ObservableState): SimAction {
             reward GetReward
 
             training {
-                EpisodeIterationLimit: 1100,
-                TotalIterationLimit: 200000000
+                EpisodeIterationLimit: 1100
             }
             lesson walking{
               scenario {
