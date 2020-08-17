@@ -14,7 +14,7 @@ RUN pip3 install -U setuptools \
   && pip3 install . \
   && pip3 install gym \
   && pip3 install microsoft-bonsai-api \
-  && git clone https://github.com/benelot/pybullet-gym.git \
+  && git clone https://github.com/Talos-Lab/pybullet-gym.git \
   && cd pybullet-gym \
   && pip3 install -e . 
 
