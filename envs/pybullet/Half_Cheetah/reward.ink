@@ -9,6 +9,7 @@ type SimState {
     obs:number<-5.0..5.0>[26],
     joints_at_limit_cost:number,
     progress:number
+    electricity_cost:number
 }
 
 
@@ -64,10 +65,9 @@ graph (input: ObservableState): SimAction {
 }
 
 function GetReward(State: SimState, Action: SimAction) {
-    var action_sum = Action.j1 + Action.j2 + Action.j3 + Action.j4 + Action.j5 + Action.j6
-    var reward_ctrl = - 0.1 * (action_sum * action_sum)
-    var reward_run = State.progress
-    var rew = reward_ctrl + reward_run + State.joints_at_limit_cost
+    # electicity_cost: cost for using motors -- this parameter should be carefully tuned against reward for making progress
+    var electicity_cost = State.electricity_cost + 1.8 
+    var rew = State.progress + State.joints_at_limit_cost + electicity_cost
 
     return rew
 }
