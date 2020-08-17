@@ -228,30 +228,6 @@ lesson walking{
 
 ![Alt Text](assets/hopper.gif)
 
-#### 2. Half Cheetah
-
-Make a 2D cheetah robot run.
-
-We have trained the agent using a reward function.
-
-```
-function GetReward(State: SimState, Action: SimAction) {
-    # electicity_cost: cost for using motors -- this parameter should be carefully tuned against reward for making progress
-    var electicity_cost = State.electricity_cost + 1.8 
-    var rew = State.progress + State.joints_at_limit_cost + electicity_cost
-
-    return rew
-}
-```
-
-- Bonsai training output:
-
-![Alt Text](assets/half-cheetah.jpg)
-
-- Exported agent (brain) performance:
-
-![Alt Text](assets/half-cheetah.gif)
-
 #### 2. Reacher
 **Coming Soon!**
 
