@@ -37,8 +37,8 @@ type ObservableState {
 
 # Type that represents the per-iteration action accepted by the simulator
 type SimAction {
-    central_joint_torque: number<-1 .. 1>,
-	elbow_joint_torque: number<-1 .. 1>
+    central_joint_torque: number<-1.0 .. 1.0>,
+	elbow_joint_torque: number<-1.0 .. 1.0>
 }
 
 # Define a concept graph with a single concept
@@ -51,10 +51,9 @@ graph (input: ObservableState): SimAction {
             }
             algorithm {
                 Algorithm: "PPO",
-                BatchSize : 5000,
-                PolicyLearningRate:0.001
+                BatchSize : 10000,
+                PolicyLearningRate:0.0001
             }
-            
             reward GetReward
 
             training {
@@ -74,16 +73,16 @@ graph (input: ObservableState): SimAction {
 
 function GetReward(State: SimState, Action: SimAction) {
 
-    var electricity_cost = -0.1 * (Math.Abs(Action.central_joint_torque * State.theta_velocity) +     
-       Math.Abs(Action.elbow_joint_torque * State.gama_velocity)) 
-       -0.01 * (Math.Abs(Action.central_joint_torque) + Math.Abs(Action.elbow_joint_torque))   
+   # var electricity_cost = -0.1 * (Math.Abs(Action.central_joint_torque * State.theta_velocity) +     
+   #    Math.Abs(Action.elbow_joint_torque * State.gama_velocity)) 
+   #    -0.01 * (Math.Abs(Action.central_joint_torque) + Math.Abs(Action.elbow_joint_torque))   
 
-    var stuck_joint_cost = 0.0
-    if Math.Abs(Math.Abs(State.gama)-1) < 0.01
-    {
-     stuck_joint_cost = -0.1
-    }
+    #var stuck_joint_cost = 0.0
+    #if Math.Abs(Math.Abs(State.gama)-1) < 0.01
+    #{
+    # stuck_joint_cost = -0.1
+    #}
 
-    var rew = State.progress + electricity_cost + stuck_joint_cost
-    return rew
+    #var rew = State.progress + electricity_cost + stuck_joint_cost
+    return State.rew
 }
