@@ -19,6 +19,8 @@ Full documentation for Bonsai's Platform can be found at https://docs.bons.ai.
 
 ## Set-Up
 
+We are using Python 3.8.3, you might need to use python3 command if you are running multyple versions.
+
 You will need to create an account with Microsoft Bonsai.
 Follow instructions: https://docs.microsoft.com/en-us/bonsai/guides/account-setup
 
@@ -33,9 +35,20 @@ Our environment depend on **microsoft_bonsai_api** package and on **gym_connecto
 
 ```
 cd connectors
-pip3 install .
-pip3 install microsoft_bonsai_api
+pip install .
+pip install microsoft_bonsai_api
 ```
+
+For the PyBullet environments you will need additionally the **pybullet-gym**. 
+We have added a default arena and fixed an issue with the camera, so we advise to use are forked version. Original code can be found here: https://github.com/benelot/pybullet-gym
+The flag -e in pip is required to install the assets.
+
+```
+git clone https://github.com/Talos-Lab/pybullet-gym.git
+cd pybulley-gym
+pip install -e .
+```
+
 
 ### Building Dockerfile
 To upload and use the simulator from Azure, you need to push it as a docker image to Azure Container Registry.
