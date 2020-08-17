@@ -20,9 +20,6 @@ class HalfCheetah(PyBulletSimulator):
         """
 
         self.bonsai_state = {"obs": [0.0]}
-        self.prev_body_x: float = None
-        self.prev_body_y: float = None
-        self.prev_body_z: float = None
         self.prev_potential: float = None
 
         super().__init__(iteration_limit, skip_frame)
