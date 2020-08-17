@@ -29,7 +29,7 @@ if __name__ == '__main__':
     log.setLevel(level='DEBUG')
 
     # we will use our environment (wrapper of OpenAI env)
-    hopper = Hopper(iteration_limit=500)
+    hopper = Hopper(iteration_limit=1000)
 
     # setting initial camera position
     hopper.initialize_camera(distance=2, yaw=10, pitch=-20)
