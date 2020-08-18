@@ -211,8 +211,7 @@ algorithm {
 reward GetReward
 
 training {
-    EpisodeIterationLimit: 300,
-    TotalIterationLimit: 200000000
+    EpisodeIterationLimit: 300
 }
 lesson walking{
     scenario {
