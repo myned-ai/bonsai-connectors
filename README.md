@@ -229,7 +229,7 @@ function GetReward(State: SimState, Action: SimAction) {
 
 - Exported agent (brain) performance:
 
-![Alt Text](assets/hopper.gif)
+![Alt Text](assets/hoppers.gif)
 
 #### 2. Reacher
 **Coming Soon!**
