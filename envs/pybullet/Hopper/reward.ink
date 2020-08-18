@@ -2,6 +2,8 @@
 
 inkling "2.0"
 using Number
+using Math
+
 
 # Type that represents the per-iteration state returned by simulator
 type SimState {
@@ -37,18 +39,19 @@ graph (input: ObservableState): SimAction {
             }
             algorithm {
                 Algorithm: "PPO",
-                BatchSize : 5000,
+                BatchSize : 3000,
                 PolicyLearningRate:0.001
             }
             
             reward GetReward
 
             training {
-                EpisodeIterationLimit: 1100
+                EpisodeIterationLimit: 300,
+                TotalIterationLimit: 200000000
             }
             lesson walking{
               scenario {
-                    episode_iteration_limit: 1100
+                    episode_iteration_limit: 300
                 }
             }
         }
