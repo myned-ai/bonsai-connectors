@@ -57,6 +57,12 @@
           }
         },
         {
+          "name": "rew",
+          "type": {
+            "category": "number"
+          }
+        },
+        {
           "name": "electricity_cost",
           "type": {
             "category": "number"

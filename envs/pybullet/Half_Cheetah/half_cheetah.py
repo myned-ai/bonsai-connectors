@@ -39,6 +39,7 @@ class HalfCheetah(PyBulletSimulator):
         progress = potential - self.prev_potential
 
         self.bonsai_state = {"obs": state.tolist(),
+                             "rew": self.get_last_reward(),
                              "electricity_cost": electricity_cost,
                              "joints_at_limit_cost": joints_at_limit_cost,
                              "progress": progress}
@@ -66,11 +67,13 @@ class HalfCheetah(PyBulletSimulator):
         log.debug('get_state: {}'.format(self.bonsai_state))
         return self.bonsai_state
 
-    def episode_start(self, config: Dict[str, Any] = None) -> None:
+    def initialize_camera(self, distance, yaw, pitch, x=0, y=0, z=0):
+        """Initializes the position of Camera
+        """
+        lookat = [x, y, z]
 
-        self.prev_potential = None
-
-        super().episode_start(config)
+        self._env.unwrapped._p.resetDebugVisualizerCamera(
+            distance, yaw, pitch, lookat)
 
 
 if __name__ == "__main__":
