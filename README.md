@@ -1,4 +1,4 @@
-# Bonsai Connect
+# Bonsai Connector
 
 Bonsai Connector is an open-source library, which gives us access to OpenAI Gym standardised set of environments while using Microsoft's reinforcement learning platform Bonsai.
 
