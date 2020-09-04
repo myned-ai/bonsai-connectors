@@ -1,6 +1,6 @@
-# Bonsai Gym
+# Bonsai Connect
 
-Bonsai Gym is an open-source library, which gives us access to OpenAI Gym standardised set of environments while using Microsoft's reinforcement learning platform Bonsai.
+Bonsai Connector is an open-source library, which gives us access to OpenAI Gym standardised set of environments while using Microsoft's reinforcement learning platform Bonsai.
 
 The repository also contains examples how to use this library to build and deploy OpenAI Gym environments to Bonsai and how to interact with the trained agent (Brain) from your code.  
 
@@ -24,7 +24,7 @@ We are using Python 3.8.3, you might need to use python3 command if you are runn
 You will need to create an account with Microsoft Bonsai.
 Follow instructions: https://docs.microsoft.com/en-us/bonsai/guides/account-setup
 
-Bonsai Gym requires two environment variables to be set to be able to connect to Microsoft Bonsai:
+Bonsai Connector requires two environment variables to be set to be able to connect to Microsoft Bonsai:
 
 **SIM_ACCESS_KEY**. You can copy it from the Account Settings page.
 
