@@ -57,37 +57,7 @@
           }
         },
         {
-          "name": "prev_body_x",
-          "type": {
-            "category": "number"
-          }
-        },
-        {
-          "name": "prev_body_y",
-          "type": {
-            "category": "number"
-          }
-        },
-        {
-          "name": "prev_body_z",
-          "type": {
-            "category": "number"
-          }
-        },
-        {
           "name": "rew",
-          "type": {
-            "category": "number"
-          }
-        },
-        {
-          "name": "episode_rew",
-          "type": {
-            "category": "number"
-          }
-        },
-        {
-          "name": "progress",
           "type": {
             "category": "number"
           }
