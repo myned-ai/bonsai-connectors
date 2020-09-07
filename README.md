@@ -1,5 +1,9 @@
 # Bonsai Connectors
 
+![Alt Text](assets/cart_pole.gif)|![Alt Text](assets/mountain_car.gif)|![Alt Text](assets/hoppers.gif)  |![Alt Text](assets/reacher.gif)
+:-------------------------------:|:----------------------------------:|:-------------------------------:|:------------------------------:
+
+
 Bonsai Connectors is an open-source library, which gives us access to OpenAI Gym standardised set of environments while using Microsoft's reinforcement learning platform Bonsai.
 
 The repository also contains examples how to use this library to build and deploy OpenAI Gym environments to Bonsai and how to interact with the trained agent (Brain) from your code.  
@@ -44,8 +48,8 @@ We have added a default arena and fixed an issue with the camera, so we advise t
 The flag -e in pip is required to install the assets.
 
 ```
-git clone https://github.com/Talos-Lab/pybullet-gym.git
-cd pybulley-gym
+git clone https://github.com/myned-ai/pybullet-gym.git
+cd pybulley-gym]
 pip install -e .
 ```
 
@@ -100,91 +104,7 @@ Inside on each environment folder we have created an agent that can run locally 
 
 A collection of control theory problems from the classic RL literature.
 
-#### 1. Inverted Pendulum
-
-The inverted pendulum swing-up problem is a classic problem in the control literature. In this version of the problem, the pendulum starts in a random position, and the goal is to swing it up so it stays upright.
-
-We have trained the agent using a reward function, although a goal statement produced equally good results.
-
-Reward function:
-```
-function GetReward(State: SimState, Action: SimAction) {
-    var cmd = Action.command   #the value of the last command
-    var theta = Math.ArcCos(State.cos_theta)   
-    var cost = ((((theta + Math.Pi) % (2 * Math.Pi)) - Math.Pi) ** 2) + 0.1 * (State.angular_velocity ** 2) + 0.001 * (cmd ** 2)
-
-    return -cost
-}
-```
-Alternative Goal statement:
-```
-goal (State: SimState) {
-    drive `upwards`:
-        State.cos_theta in Goal.Range(0.707, 1.0)
-}
-```
-
-- Bonsai training output:
-
-![Alt Text](assets/pendulum.jpg)
-
-- Exported agent (brain) performance:
-
-![Alt Text](assets/pendulum.gif)
-
-#### 2. Mountain Car
-
-A car is on a one-dimensional track, positioned between two "mountains". The goal is to drive up the mountain on the right; however, the car's engine is not strong enough to scale the mountain in a single pass. Therefore, the only way to succeed is to drive back and forth to build up momentum.
-
-The environment appeared first in Andrew Moore's PhD Thesis (1990).
-
-We have trained the agent using two  goal statements.
-
-```
-goal (State: SimState) {
-    reach `car position`:
-        State.position in Goal.RangeAbove(0.5)  
-    maximize `speed`:
-        Math.Abs(State.speed) in Goal.Range(0, 0.07)      
-}
-```
-
-- Bonsai training output:
-
-![Alt Text](assets/mountain_car.jpg)
-
-- Exported agent (brain) performance:
-
-![Alt Text](assets/mountain_car.gif)
-
-#### 3. Cart Pole
-
-A pole is attached by an un-actuated joint to a cart, which moves along
-a frictionless track. The pendulum starts upright, and the goal is to
-prevent it from falling over by increasing and reducing the cart's
-velocity.
-
-This environment corresponds to the version of the cart-pole problem
-described by Barto, Sutton, and Anderson
-
-We have trained the agent using reward function and choosing the algorithm parameters.
-
-```
-goal (State: SimState) {
-    avoid `Fall Over`:
-        Math.Abs(State.pole_angle) in Goal.RangeAbove(0.15)
-    avoid `Out Of Range`:
-        Math.Abs(State.cart_position) in Goal.RangeAbove(1.4)
-}
-```
-
-- Bonsai training output:
-
-![Alt Text](assets/cart_pole.jpg)
-
-- Exported agent (brain) performance:
-
-![Alt Text](assets/cart_pole.gif)
+[README link](https://github.com/myned-ai/bonsai-connectors/blob/tide-up/envs/classic_controls/README.md)
 
 ### PyBullet
 
@@ -192,74 +112,4 @@ Bullet is a physics engine which simulates collision detection, soft and rigid b
 
 PyBullet Gymperium is an open-source implementation of the OpenAI Gym MuJoCo environments for use with the OpenAI Gym Reinforcement Learning Research Platform in support of open research.
 
-#### 1. Hopper
-
-Make a two-dimensional one-legged robot hop forward as fast as possible.
-The robot model is based on work by Erez, Tassa, and Todorov.
-
-T Erez, Y Tassa, E Todorov, "Infinite Horizon Model Predictive Control for Nonlinear Periodic Tasks", 2011.
-
-We have trained the agent by reusing the reward function defined in pybullet-gym and amended the PPO algorithm parameters.
-
-```
-algorithm {
-    Algorithm: "PPO",
-    BatchSize : 3000,
-    PolicyLearningRate:0.001
-}
-
-reward GetReward
-
-training {
-    EpisodeIterationLimit: 300
-}
-lesson walking{
-    scenario {
-        episode_iteration_limit: 300
-    }
-}
-
-function GetReward(State: SimState, Action: SimAction) {
-    return State.rew
-}    
-```
-
-- Bonsai training output:
-
-![Alt Text](assets/hopper.jpg)
-
-- Exported agent (brain) performance:
-
-![Alt Text](assets/hoppers.gif)
-
-#### 2. Reacher
-
-Make a 2D robot reach to a randomly located target.
-
-We have trained the agent by getting the reward function defined in pybullet-gym and amended the PPO algorithm parameters.
-
-```
-algorithm {
-    Algorithm: "PPO",
-    BatchSize : 10000,
-    PolicyLearningRate:0.0001
-}
-reward GetReward
-
-training {
-    EpisodeIterationLimit: 200
-}
-lesson walking{
-    scenario {
-        episode_iteration_limit: 200
-    }
-}
-```
-
-- Bonsai training output:
-
-![Alt Text](assets/reacher.jpg)
-
-- Exported agent (brain) performance:
-
-![Alt Text](assets/reacher.gif)
+[README link](https://github.com/myned-ai/bonsai-connectors/blob/tide-up/envs/pybullet/README.md)
