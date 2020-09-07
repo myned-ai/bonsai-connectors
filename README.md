@@ -234,4 +234,32 @@ function GetReward(State: SimState, Action: SimAction) {
 
 #### 2. Reacher
 
+Make a 2D robot reach to a randomly located target.
+
+We have trained the agent by getting the reward function defined in pybullet-gym and amended the PPO algorithm parameters.
+
+```
+algorithm {
+    Algorithm: "PPO",
+    BatchSize : 10000,
+    PolicyLearningRate:0.0001
+}
+reward GetReward
+
+training {
+    EpisodeIterationLimit: 200
+}
+lesson walking{
+    scenario {
+        episode_iteration_limit: 200
+    }
+}
+```
+
+- Bonsai training output:
+
+![Alt Text](assets/reacher.jpg)
+
+- Exported agent (brain) performance:
+
 ![Alt Text](assets/reacher.gif)
