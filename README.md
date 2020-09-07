@@ -216,6 +216,5 @@ lesson walking{
 ![Alt Text](assets/hopper.gif)
 
 #### 2. Reacher
-**Coming Soon!**
 
-![Alt Text](assets/reacher.png)
+![Alt Text](assets/reacher.gif)
