@@ -1,0 +1,112 @@
+{
+  "name": "reacher_simulator",
+  "timeout": 60,
+  "description": {
+    "config": {
+      "category": "Struct",
+      "fields": [        
+        {
+          "name": "iteration_limit",
+          "type": {
+            "category": "Number",
+            "defaultValue": 0
+          }
+        }
+      ]
+    },
+    "action": {
+      "category": "Struct",
+      "fields": [
+        {
+          "name": "central_joint_torque",
+          "type": {
+            "category": "Number"
+          }
+        },
+		{
+          "name": "elbow_joint_torque",
+          "type": {
+            "category": "Number"
+          }
+        }
+      ]
+    },
+    "state": {
+      "category": "Struct",
+      "fields": [
+        {
+          "name": "target_x",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "target_y",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "to_target_x",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "to_target_y",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "cos_theta",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "sin_theta",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "theta_velocity",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "gamma",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "gama_velocity",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "rew",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "episode_rew",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "progress",
+          "type": {
+            "category": "Number"
+          }
+        }
+      ]
+    }
+  }
+}
