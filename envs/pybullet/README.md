@@ -106,7 +106,7 @@ function GetReward(State: SimState, Action: SimAction) {
 
 - Bonsai training output:
 
-
+![Alt Text](../../assets/half_cheetah.jpg)
 
 - Exported agent (brain) performance:
 
