@@ -104,7 +104,7 @@ Inside on each environment folder we have created an agent that can run locally 
 
 A collection of control theory problems from the classic RL literature.
 
-[README link](https://github.com/myned-ai/bonsai-connectors/blob/tide-up/envs/classic_controls/README.md)
+[README link](https://github.com/myned-ai/bonsai-connectors/blob/master/envs/classic_controls/README.md)
 
 ### PyBullet
 
@@ -112,4 +112,4 @@ Bullet is a physics engine which simulates collision detection, soft and rigid b
 
 PyBullet Gymperium is an open-source implementation of the OpenAI Gym MuJoCo environments for use with the OpenAI Gym Reinforcement Learning Research Platform in support of open research.
 
-[README link](https://github.com/myned-ai/bonsai-connectors/blob/tide-up/envs/pybullet/README.md)
+[README link](https://github.com/myned-ai/bonsai-connectors/blob/master/envs/pybullet/README.md)
