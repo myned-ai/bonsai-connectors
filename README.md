@@ -2,6 +2,7 @@
 
 ![Alt Text](assets/cart_pole.gif)|![Alt Text](assets/mountain_car.gif)|![Alt Text](assets/hoppers.gif)  |![Alt Text](assets/reacher.gif)
 :-------------------------------:|:----------------------------------:|:-------------------------------:|:------------------------------:
+
 ![Alt Text](assets/pendulum.gif)                |                                       |![Alt Text](assets/half_cheetah.gif)
 :----------------------------------------------:|:---------------------------------   -:|:----------------------------------------------:
 
