@@ -2,9 +2,8 @@
 
 ![Alt Text](assets/cart_pole.gif)|![Alt Text](assets/mountain_car.gif)|![Alt Text](assets/hoppers.gif)  |![Alt Text](assets/reacher.gif)
 :-------------------------------:|:----------------------------------:|:-------------------------------:|:------------------------------:
-
 ![Alt Text](assets/pendulum.gif)                |                                       |![Alt Text](assets/half_cheetah.gif)
-:----------------------------------------------:|:---------------------------------   -:|:----------------------------------------------:
+
 
 Bonsai Connectors is an open-source library, which gives us access to OpenAI Gym standardised set of environments while using Microsoft's reinforcement learning platform Bonsai.
 
