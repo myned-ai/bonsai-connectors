@@ -22,10 +22,10 @@ RUN pip3 install -U setuptools \
 WORKDIR /sim
 
 # Copy simulator files to /sim
-COPY envs/pybullet/Half_Cheetah/half_cheetah.py \
-     envs/pybullet/Half_Cheetah/simulator_interface.json \
+COPY envs/pybullet/Ant/ant.py \
+     envs/pybullet/Ant/simulator_interface.json \
      /sim/ 
 
 
 # This will be the command to run the simulator
-CMD ["python", "half_cheetah.py", "--headless", "--verbose"]
+CMD ["python", "ant.py", "--headless", "--verbose"]s
