@@ -6,7 +6,7 @@ from gym_connectors import BonsaiConnector, GymSimulator
 log = logging.getLogger("mountain-car")
 
 class MountainCar(GymSimulator):
-    """ Implements the methods specific to Open AI Gym Pendulum environment 
+    """ Implements the methods specific to Open AI Gym Mountain Car environment 
     """    
     
     environment_name = 'MountainCar-v0'      # Environment name, from openai-gym
