@@ -1,6 +1,8 @@
 import logging
 from typing import Any, Dict
+import gym
 
+from obswrapper import ObsWrapper
 from gym_connectors import BonsaiConnector, GymSimulator
 
 log = logging.getLogger("carrace")
@@ -19,12 +21,16 @@ class CarRacing(GymSimulator):
 
         super().__init__(iteration_limit, skip_frame)
 
+    def make_environment(self, headless):
+
+        self._env = ObsWrapper(gym.make(self.environment_name))
+
     def gym_to_state(self, state):
         """ Converts openai environment observation to Bonsai state, as defined in inkling
         """
         reward = self._env.unwrapped.reward
 
-        self.bonsai_state = {"obs": state.tolist(),
+        self.bonsai_state = {"obs": state.reshape(-1).tolist(),
                              "rew": reward}
 
         return self.bonsai_state
