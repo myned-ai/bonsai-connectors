@@ -1,41 +1,29 @@
 {
-  "name": "cartpole-py-v5",
+  "name": "car-racing",
   "timeout": 60,
   "description": {
     "config": {
       "category": "Struct",
       "fields": [
-        {
-          "name": "initial_cart_position",
-          "type": {
-            "category": "Number",
-            "defaultValue": 0,
-            "comment": "Starting position of cart in meters"
-          }
-        },
-        {
-          "name": "initial_pole_angle",
-          "type": {
-            "category": "Number",
-            "defaultValue": 0,
-            "comment": "Starting angle of pole in radians"
-          }
-        },
-        {
-          "name": "target_pole_position",
-          "type": {
-            "category": "Number",
-            "defaultValue": 0,
-            "comment": "Target position of pole in meters"
-          }
-        }
       ]
     },
     "action": {
       "category": "Struct",
       "fields": [
         {
-          "name": "command",
+          "name": "gas",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "break",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "steer",
           "type": {
             "category": "Number"
           }
@@ -46,31 +34,15 @@
       "category": "Struct",
       "fields": [
         {
-          "name": "cart_position",
+          "name": "obs",
           "type": {
-            "category": "Number",
-            "comment": "Position of cart in meters"
+            "category": "Array"
           }
         },
         {
-          "name": "cart_velocity",
+          "name": "rew",
           "type": {
-            "category": "Number",
-            "comment": "Velocity of cart in x direction in meters/sec"
-          }
-        },
-        {
-          "name": "pole_angle",
-          "type": {
-            "category": "Number",
-            "comment": "Current angle of pole in radians"
-          }
-        },
-        {
-          "name": "pole_angular_velocity",
-          "type": {
-            "category": "Number",
-            "comment": "Angular velocity of pole in radians/sec"
+            "category": "Number"
           }
         }
       ]
