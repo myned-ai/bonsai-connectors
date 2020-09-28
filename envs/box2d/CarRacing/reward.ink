@@ -7,26 +7,26 @@ using Math
 
 # Type that represents the per-iteration state returned by simulator
 type SimState {
-    obs:<0..255>[H][W][3],
+    obs:number[256],
     rew:number
 }
 
 # Type that represents the per-iteration action accepted by the simulator
 type SimAction {
 
-    steer: number<-1.0, 1.0>,
-    gas: number<0.0, 1.0>,
-    break: number<0.0, 1.0>
+    steer: number<-1.0, 1.0,>,
+    gas: number<0.0, 1.0,>,
+    break: number<0.0, 1.0,>
 
 }
 
 # Define a concept graph with a single concept
-graph (input: ObservableState): SimAction {
-    concept CarRacer(input): SimAction {
+graph (input: SimState): SimAction {
+    concept CarRacing(input): SimAction {
         curriculum {
             # The source of training for this concept is a simulator
             # that takes an action as an input and outputs a state.
-            source simulator (Action: SimAction,Config: SimConfig): SimState {
+            source simulator (Action: SimAction): SimState {
             }
             
             reward GetReward
@@ -35,9 +35,15 @@ graph (input: ObservableState): SimAction {
         }
         
     }
-    
-}
+
 
 function GetReward(State: SimState, Action: SimAction) {
+   # var playfield = 2000/6.0
+   # var rew = -0.1
+
+   # if Math.Abs(State.x) > playfield or Math.Abs(State.y) > playfield {
+   #     rew = -100
+   # }
+
     return State.rew
 }
