@@ -9,6 +9,7 @@ from gym.spaces import Box
 from gym import ObservationWrapper
 
 
+
 class ObsWrapper(gym.ObservationWrapper):
     def __init__(self, env):
         super().__init__(env)
@@ -27,3 +28,4 @@ class ObsWrapper(gym.ObservationWrapper):
 
         encoded = self.loaded_model.encoder(obs).numpy()
         return encoded
+
