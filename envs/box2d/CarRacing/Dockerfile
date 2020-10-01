@@ -11,16 +11,16 @@ RUN apt-get update && \
 
 # Install SDK3 Python
 COPY connectors ./connectors
-RUN pip3 install setuptools \
-  && cd connectors \
+RUN cd connectors \
   && pip3 install . \
-  && pip3 install gym
-RUN pip3 install tensorflow \
-  && pip3 install numpy \
-  && pip install pyglet
-RUN pip3 install Box2D \
-  && pip3 install opencv-python \
-  && pip3 install microsoft-bonsai-api
+  setuptools \
+  gym \
+  numpy \
+  pyglet==1.5.0 \
+  Box2D \
+  opencv-python \
+  microsoft-bonsai-api==0.1.1 \
+  https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_x86_64.whl
 
 # Set up the simulator
 WORKDIR /sim
@@ -30,7 +30,7 @@ COPY envs/box2d/CarRacing/carracing.py \
   envs/box2d/CarRacing/obswrapper.py \
   envs/box2d/CarRacing/simulator_interface.json \
   /sim/ 
-COPY envs/box2d/CarRacing/autoencoder_model /sim/autoencoder_model     
+COPY envs/box2d/CarRacing/autoencoder_model.tflite /sim/autoencoder_model.tflite 
 
 
 # This will be the command to run the simulator
