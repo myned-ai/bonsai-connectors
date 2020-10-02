@@ -1,6 +1,7 @@
 import logging
 from typing import Any, Dict
 import gym
+import numpy as np
 
 from obswrapper import ObsWrapper
 from gym_connectors import BonsaiConnector, GymSimulator
@@ -18,6 +19,7 @@ class CarRacing(GymSimulator):
         """ Initializes the CarRacing environment
         """
         self.bonsai_state = None
+        self.prev_count = None
 
         super().__init__(iteration_limit, skip_frame)
 
@@ -28,10 +30,27 @@ class CarRacing(GymSimulator):
     def gym_to_state(self, state):
         """ Converts openai environment observation to Bonsai state, as defined in inkling
         """
-        reward = self._env.unwrapped.reward
 
-        self.bonsai_state = {"obs": state.reshape(-1).tolist(),
-                             "rew": reward}
+        x, y = self._env.unwrapped.car.hull.position
+
+        grass_driving = state['grass_driving']
+
+        obs = state['obs'].reshape(-1) / 255.0
+
+        length = len(self._env.unwrapped.track)
+
+        count = self._env.unwrapped.tile_visited_count
+
+        progress = count - self.prev_count
+
+        self.bonsai_state = {"obs": obs.tolist(),
+                             "x": x,
+                             "y": y,
+                             "length": length,
+                             "progress": progress,
+                             "grass_driving": grass_driving}
+
+        self.prev_count = count
 
         return self.bonsai_state
 
@@ -49,6 +68,11 @@ class CarRacing(GymSimulator):
         """
         log.debug('get_state: {}'.format(self.bonsai_state))
         return self.bonsai_state
+
+    def episode_start(self, config: Dict[str, Any] = None) -> None:
+
+        self.prev_count = 0
+        super().episode_start(config)
 
 
 if __name__ == "__main__":
