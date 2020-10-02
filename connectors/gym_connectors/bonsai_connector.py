@@ -29,10 +29,11 @@ class BonsaiConnector:
         episode_finish(self, reason: str) -> None:
     """
 
-    def __init__(self, simulator):
+    def __init__(self, simulator, enable_api_logging = False):
         """ Initialize the BonsaiConnector and accepts the simulator
         """
         self.simulator = simulator
+        self.enable_api_logging = enable_api_logging
 
     def get_state(self) -> Dict[str, Any]:
         """ Returns the current state of the simulator
@@ -69,7 +70,7 @@ class BonsaiConnector:
     def run(self):
         """ Connects to the Bonsai service processes the command and passes them to the simulator
         """
-        config_client = BonsaiClientConfig()
+        config_client = BonsaiClientConfig(enable_logging=self.enable_api_logging)
         client = BonsaiClient(config_client)
 
         # Load json file as simulator integration config type file
@@ -110,8 +111,8 @@ class BonsaiConnector:
 
                 # Event loop
                 if event.type == 'Idle':
+                    log.info('Idling...{}'.format(event.idle.callback_time))
                     time.sleep(event.idle.callback_time)
-                    log.info('Idling...')
                 elif event.type == 'EpisodeStart':
                     self.episode_start(event.episode_start.config)
                 elif event.type == 'EpisodeStep':

@@ -6,7 +6,7 @@ import numpy as np
 from obswrapper import ObsWrapper
 from gym_connectors import BonsaiConnector, GymSimulator
 
-log = logging.getLogger("carrace")
+log = logging.getLogger("carracing")
 
 
 class CarRacing(GymSimulator):
@@ -18,7 +18,14 @@ class CarRacing(GymSimulator):
     def __init__(self, iteration_limit=200, skip_frame=1):
         """ Initializes the CarRacing environment
         """
-        self.bonsai_state = None
+        self.bonsai_state = {"obs": [],
+                        "x": 0.0,
+                        "y": 0.0,
+                        "length": 0,
+                        "progress": 0.0,
+                        "grass_driving_r": 0.0,
+                        "grass_driving_g": 0.0,
+                        "grass_driving_b": 0.0}
         self.prev_count = None
 
         super().__init__(iteration_limit, skip_frame)
@@ -30,10 +37,11 @@ class CarRacing(GymSimulator):
     def gym_to_state(self, state):
         """ Converts openai environment observation to Bonsai state, as defined in inkling
         """
-
         x, y = self._env.unwrapped.car.hull.position
 
-        grass_driving = state['grass_driving']
+        grass_driving_r = state['grass_driving_r']
+        grass_driving_g = state['grass_driving_g']
+        grass_driving_b = state['grass_driving_b']
 
         obs = state['obs'].reshape(-1) / 255.0
 
@@ -48,7 +56,9 @@ class CarRacing(GymSimulator):
                              "y": y,
                              "length": length,
                              "progress": progress,
-                             "grass_driving": grass_driving}
+                             "grass_driving_r": grass_driving_r,
+                             "grass_driving_g": grass_driving_g,
+                             "grass_driving_b": grass_driving_b}
 
         self.prev_count = count
 
@@ -84,11 +94,14 @@ if __name__ == "__main__":
     log.setLevel(level='DEBUG')
 
     # if more information is needed, uncomment this
-    #gymlog = logging.getLogger("GymSimulator")
-    # gymlog.setLevel(level='DEBUG')
+    gymlog = logging.getLogger("GymSimulator")
+    gymlog.setLevel(level='DEBUG')
+
+    gymlog = logging.getLogger("BonsaiConnector")
+    gymlog.setLevel(level='DEBUG')
 
     carracing = CarRacing()
-    connector = BonsaiConnector(carracing)
+    connector = BonsaiConnector(carracing, True)
 
     while connector.run():
         continue

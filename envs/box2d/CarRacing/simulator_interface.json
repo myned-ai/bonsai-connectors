@@ -1,6 +1,6 @@
 {
   "name": "car-racing",
-  "timeout": 60,
+  "timeout": 10,
   "description": {
     "config": {
       "category": "Struct",
@@ -40,7 +40,43 @@
           }
         },
         {
-          "name": "rew",
+          "name": "x",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "y",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "length",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "progress",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "grass_driving_r",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "grass_driving_g",
+          "type": {
+            "category": "Number"
+          }
+        },
+        {
+          "name": "grass_driving_b",
           "type": {
             "category": "Number"
           }
