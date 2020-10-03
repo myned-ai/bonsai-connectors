@@ -120,12 +120,17 @@ class BonsaiConnector:
                 elif event.type == 'EpisodeFinish':
                     self.episode_finish("")
                 elif event.type == 'Unregister':
-                    client.session.delete(
-                        workspace_name = config_client.workspace,
-                        session_id = session.session_id
-                    )
+                    log.info("Unregister event received - deleting session")
+                    try:
+                        client.session.delete(
+                            workspace_name = config_client.workspace,
+                            session_id = session.session_id)
+                    except Exception as err:
+                        log.info("An error occured while trying to delete session {}".format(err))
+                        
                     log.info("Unregistered simulator.")
                 else:
+                    log.info("Unknown event received - type {}".format(event.type))
                     pass
         except KeyboardInterrupt:
             # Gracefully unregister with keyboard interrupt
@@ -135,9 +140,10 @@ class BonsaiConnector:
             )
             log.info("Unregistered simulator.")
         except Exception as err:
+            log.info("Exception occured: {}. Trying to delete session".format(err))
             # Gracefully unregister for any other exceptions
             client.session.delete(
                 workspace_name = config_client.workspace,
                 session_id = session.session_id
             )
-            log.info("Unregistered simulator because: {}".format(err))
+            log.info("Deleted session")

@@ -1,5 +1,5 @@
 # this is one of the cached base images available for ACI
-FROM python:3.8.3
+FROM python:3.7.4
 
 # Install libraries and dependencies
 RUN apt-get update && \
@@ -20,7 +20,7 @@ RUN cd connectors \
   Box2D \
   opencv-python \
   microsoft-bonsai-api==0.1.2 \
-  https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp38-cp38-linux_x86_64.whl
+  https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_x86_64.whl
 
 # Set up the simulator
 WORKDIR /sim

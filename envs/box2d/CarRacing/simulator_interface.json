@@ -1,10 +1,16 @@
 {
   "name": "car-racing",
-  "timeout": 10,
+  "timeout": 270,
   "description": {
     "config": {
       "category": "Struct",
       "fields": [
+        {
+          "name":"episode_iteration_limit",
+          "type": {
+            "category": "Number"
+          }
+        }
       ]
     },
     "action": {

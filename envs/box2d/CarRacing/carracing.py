@@ -2,12 +2,12 @@ import logging
 from typing import Any, Dict
 import gym
 import numpy as np
+import os
 
 from obswrapper import ObsWrapper
 from gym_connectors import BonsaiConnector, GymSimulator
 
 log = logging.getLogger("carracing")
-
 
 class CarRacing(GymSimulator):
     """ Implements the methods specific to Open AI Gym CarRacing environment 
@@ -18,17 +18,22 @@ class CarRacing(GymSimulator):
     def __init__(self, iteration_limit=200, skip_frame=1):
         """ Initializes the CarRacing environment
         """
-        self.bonsai_state = {"obs": [],
-                        "x": 0.0,
-                        "y": 0.0,
-                        "length": 0,
-                        "progress": 0.0,
-                        "grass_driving_r": 0.0,
-                        "grass_driving_g": 0.0,
-                        "grass_driving_b": 0.0}
+        super().__init__(iteration_limit, skip_frame)
+
+        #little help for finding the interface file when debugging from different directory 
+        self.interface_file_path = os.path.join(os.path.dirname(__file__), self.interface_file_path)
+
+        self.bonsai_state = {"obs": np.zeros((256,)).astype(np.float32).tolist(),
+                        "x": float(0.0),
+                        "y": float(0.0),
+                        "length": float(0),
+                        "progress": float(0.0),
+                        "grass_driving_r": float(0.0),
+                        "grass_driving_g": float(0.0),
+                        "grass_driving_b": float(0.0)}
         self.prev_count = None
 
-        super().__init__(iteration_limit, skip_frame)
+
 
     def make_environment(self, headless):
 
@@ -51,14 +56,14 @@ class CarRacing(GymSimulator):
 
         progress = count - self.prev_count
 
-        self.bonsai_state = {"obs": obs.tolist(),
-                             "x": x,
-                             "y": y,
-                             "length": length,
-                             "progress": progress,
-                             "grass_driving_r": grass_driving_r,
-                             "grass_driving_g": grass_driving_g,
-                             "grass_driving_b": grass_driving_b}
+        self.bonsai_state = {"obs": obs.astype(np.float32).tolist(),
+                             "x": float(x),
+                             "y": float(y),
+                             "length": float(length),
+                             "progress": float(progress),
+                             "grass_driving_r": float(grass_driving_r),
+                             "grass_driving_g": float(grass_driving_g),
+                             "grass_driving_b": float(grass_driving_b)}
 
         self.prev_count = count
 
@@ -80,7 +85,6 @@ class CarRacing(GymSimulator):
         return self.bonsai_state
 
     def episode_start(self, config: Dict[str, Any] = None) -> None:
-
         self.prev_count = 0
         super().episode_start(config)
 
@@ -101,7 +105,7 @@ if __name__ == "__main__":
     gymlog.setLevel(level='DEBUG')
 
     carracing = CarRacing()
-    connector = BonsaiConnector(carracing, True)
+    connector = BonsaiConnector(carracing, False)
 
     while connector.run():
         continue

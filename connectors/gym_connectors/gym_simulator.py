@@ -20,12 +20,16 @@ class GymSimulator:
     """
 
     environment_name = ''  # name of the OpenAI Gym environment specified in derived class
-
-    def __init__(self, iteration_limit=200, skip_frame=1):
+    
+    def __init__(self, iteration_limit=200, skip_frame=1, seed=None):
         """ Initializes the GymSimulator object
         """
         # create the gym environment
-        log.info("Creating {} environment".format(self.environment_name))
+        log.info("Creating {} environment with iteration limit {} and skip_frame {}"
+            .format(self.environment_name, iteration_limit, skip_frame))
+
+        #default interface file name and path
+        self.interface_file_path = "simulator_interface.json"
 
         self.finished = False
         self.episode_count = 0
@@ -47,16 +51,25 @@ class GymSimulator:
         self._skip_frame = skip_frame
 
         # random seed
-        self._env.seed(20)
-        self._env.reset()
+        self._env.seed(seed)
+
+        self.initial_reset()
 
         # book keeping for rate status
         self._log_interval = 10.0  # seconds
         self._last_status = time()
 
-    def make_environment(self, headless):
-
+    def make_environment(self, headless) -> None:
+        '''Creates a gym environment
+            Override if you want to put a wrapper around it
+        '''
         self._env = gym.make(self.environment_name)
+
+    def initial_reset(self) -> None:
+        '''Calls the environment's reset command during the gym simulator initialization
+            If you want to defer calling it till episode_start, override this method
+        '''
+        self._env.reset()
 
     def gym_to_state(self, observation) -> None:
         """Convert an openai environment observation into an Bonsai state
@@ -184,7 +197,7 @@ class GymSimulator:
         """
         log.info("- - - - - - - - - - - - - - - - - - -- - - - - -- ")
         log.info("-- EPISODE {} FINISH --". format(self.episode_count))
-        log.info("-- iteration {} episode {} reward {} reason {}".format(
+        log.info("---- iteration {} episode {} reward {} reason {}".format(
             self.iteration_count, self.episode_count, self.episode_reward, reason))
 
         self._last_status = time()
@@ -223,9 +236,7 @@ class GymSimulator:
 
             Override it in derived class to use non-generic file name
         """
-        interface_file_path = "simulator_interface.json"
-
-        with open(interface_file_path) as file:
+        with open(self.interface_file_path) as file:
             interface = json.load(file)
         return interface
 
