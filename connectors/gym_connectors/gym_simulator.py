@@ -240,6 +240,10 @@ class GymSimulator:
             interface = json.load(file)
         return interface
 
+    def unregister(self, reason: str) -> None:
+        if self._env is not None:
+            self._env.close()
+
     def parse_arguments(self):
         """ Parses command line arguments and returns them as a list
         """

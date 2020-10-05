@@ -39,6 +39,12 @@ class CarRacing(GymSimulator):
 
         self._env = ObsWrapper(gym.make(self.environment_name))
 
+    def initial_reset(self) -> None:
+        '''Calls the environment's reset command during the gym simulator initialization
+            If you want to defer calling it till episode_start, override this method
+        '''
+        #self._env.reset()
+
     def gym_to_state(self, state):
         """ Converts openai environment observation to Bonsai state, as defined in inkling
         """

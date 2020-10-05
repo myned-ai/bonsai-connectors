@@ -45,20 +45,19 @@ graph (input: ObservableState): SimAction {
             }
             algorithm {
                 Algorithm: "PPO",
-                BatchSize : 1000,
-                PolicyLearningRate:0.0005
+                BatchSize : 5000,
+                PolicyLearningRate:0.0003
 
             }
-            
             reward GetReward
 
             training {
-                EpisodeIterationLimit: 150,
+                EpisodeIterationLimit: 300,
                 TotalIterationLimit: 200000000
             }
             lesson walking{
               scenario {
-                    episode_iteration_limit: 150
+                    episode_iteration_limit: 300
                 }
             }
         }
@@ -72,12 +71,16 @@ function GetReward(State: SimState, Action: SimAction) {
    var rew = -0.2
    var playfield = 2000/6.0
 
+    rew = rew - (0.3 * Action.steer * Action.steer) 
+    rew = rew - (0.5 * Action.break * Action.break) 
+    rew = rew + (0.3 * Action.gas * Action.gas) 
+
     if State.progress > 0 {
-        rew = rew + 1000 / State.length
+        rew = rew + 800 / State.length
     }
 
    if Math.Abs(State.x) > playfield or Math.Abs(State.y) > playfield {
-        rew = rew + (-100)
+        rew = rew -100
     }
 
     return rew

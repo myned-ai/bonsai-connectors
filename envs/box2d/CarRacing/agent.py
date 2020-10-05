@@ -3,7 +3,6 @@ from os import write
 import requests
 from typing import Any, Dict
 from carracing import CarRacing
-from tensorboardX import SummaryWriter
 
 
 class BonsaiAgent(object):
@@ -12,8 +11,7 @@ class BonsaiAgent(object):
 
     def act(self, state) -> Dict[str, Any]:
         action = self.predict(state)
-        # simulator expects action to be integer
-        action["command"] = int(action["command"])
+
         return action
 
     def predict(self, state):
@@ -25,58 +23,46 @@ class BonsaiAgent(object):
 
         return action
 
-
-class RandomAgent(object):
-    """The world's simplest agent!"""
-
-    def __init__(self, carracing: CarRacing):
-        self.carracing = carracing
-
-    def act(self, state):
-        return carracing.gym_to_action(carracing._env.action_space.sample())
-
-
 if __name__ == '__main__':
     logging.basicConfig()
     log = logging.getLogger("carracing")
     log.setLevel(level='INFO')
 
-    writer = SummaryWriter()
     # we will use our environment (wrapper of OpenAI env)
-    carracing = CarRacing()
+    car_racing = CarRacing(iteration_limit=1000)
 
     # specify which agent you want to use,
     # BonsaiAgent that uses trained Brain or
     # RandomAgent that randomly selects next action
     agent = BonsaiAgent()
 
-    episode_count = 100
+    # half_cheetah._env.render()
+    # half_cheetah._env.reset()
 
+    episode_count = 100
+    iteration = 0
     try:
         for i in range(episode_count):
+            iteration = 0
             # start a new episode and get the new state
-            carracing.episode_start()
-            state = carracing.get_state()
-            cum_reward = 0
+            car_racing.episode_start()
+            state = car_racing.get_state()
 
             while True:
                 # get the action from the agent (based on the current state)
                 action = agent.act(state)
 
-                # do the next step of the simulation and get the new state
-                carracing.episode_step(action)
-                state = carracing.get_state()
+            # do the next step of the simulation and get the new state
+                car_racing.episode_step(action)
+                state = car_racing.get_state()
 
-                # get the last reward and add it the episode reward
-                reward = carracing.get_last_reward()
-                cum_reward += reward
-
-                if carracing.halted():
-                    writer.add_scalar("reward", cum_reward, i)
+                if car_racing.halted():
                     break
-                writer.flush()
-            carracing.episode_finish("")
+            print("iteration {}".format(iteration))
+            iteration += 1
+            
+            car_racing.episode_finish("")
 
-        writer.close()
     except KeyboardInterrupt:
         print("Stopped")
+        car_racing.unregister()

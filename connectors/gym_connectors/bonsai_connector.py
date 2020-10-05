@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 import logging
 import time
+import sys
+import signal
 from typing import Any, Dict
+from types import FrameType
 
 from microsoft_bonsai_api.simulator.client import BonsaiClient, BonsaiClientConfig
 from microsoft_bonsai_api.simulator.generated.models import (SimulatorInterface,
@@ -27,6 +30,8 @@ class BonsaiConnector:
         episode_step(self, action: Dict[str, Any]) -> None:
 
         episode_finish(self, reason: str) -> None:
+
+        unregister(reason: str) -> None
     """
 
     def __init__(self, simulator, enable_api_logging = False):
@@ -34,6 +39,10 @@ class BonsaiConnector:
         """
         self.simulator = simulator
         self.enable_api_logging = enable_api_logging
+
+        self.workspace = None
+        self.session =  None
+        self.session_id = None
 
     def get_state(self) -> Dict[str, Any]:
         """ Returns the current state of the simulator
@@ -67,6 +76,11 @@ class BonsaiConnector:
         """
         self.simulator.episode_finish(reason)
 
+    def unregister(self, reason: str) -> None:
+        """ Called when the simulator should stop 
+        """
+        self.simulator.unregister(reason)        
+
     def run(self):
         """ Connects to the Bonsai service processes the command and passes them to the simulator
         """
@@ -81,12 +95,16 @@ class BonsaiConnector:
             timeout = interface['timeout'],
             simulator_context = config_client.simulator_context,
         )
-
+        
         # Registers a simulator with Bonsai platform
         session = client.session.create(
             workspace_name = config_client.workspace,
             body = simulator_interface
         )
+
+        self.workspace = config_client.workspace
+        self.session =  client.session
+        self.session_id = session.session_id
 
         log.info("Registered simulator.")
         sequence_id = 1
@@ -111,8 +129,13 @@ class BonsaiConnector:
 
                 # Event loop
                 if event.type == 'Idle':
-                    log.info('Idling...{}'.format(event.idle.callback_time))
-                    time.sleep(event.idle.callback_time)
+                    try:
+                        log.info('Idling for {} seconds'.format(event.idle.callback_time))
+                        time.sleep(event.idle.callback_time)
+                    except AttributeError:
+                        # based on MS code, callbacktime is always 0. Sometimes the attribute is missing.
+                        # Idle for 0 seconds if attribute is missing.
+                        log.info('Received Idle event with missing attribute')
                 elif event.type == 'EpisodeStart':
                     self.episode_start(event.episode_start.config)
                 elif event.type == 'EpisodeStep':
@@ -129,21 +152,39 @@ class BonsaiConnector:
                         log.info("An error occured while trying to delete session {}".format(err))
                         
                     log.info("Unregistered simulator.")
+                    break
                 else:
                     log.info("Unknown event received - type {}".format(event.type))
                     pass
         except KeyboardInterrupt:
             # Gracefully unregister with keyboard interrupt
-            client.session.delete(
-                workspace_name =config_client.workspace,
-                session_id = session.session_id
-            )
-            log.info("Unregistered simulator.")
+            self.unregister_simulator("Keyboard interrupt")
+            log.info("Unregistered simulator because of keyboard interrupt.")
         except Exception as err:
-            log.info("Exception occured: {}. Trying to delete session".format(err))
+            log.error("Exception occured: {}. Trying to delete session".format(err))
             # Gracefully unregister for any other exceptions
-            client.session.delete(
-                workspace_name = config_client.workspace,
-                session_id = session.session_id
-            )
-            log.info("Deleted session")
+            self.unregister_simulator("Exception")
+
+        return False
+    
+    def unregister_simulator(self, reason:str) -> None:
+        ''' Called when received Unregister event, keyboard interrupt or SIGTERM
+            It will try to delete the session and call the simulator's unregister method
+        '''
+        log.info("Unregister event received - deleting session")
+        try:
+            self.session.delete(
+                workspace_name = self.workspace,
+                session_id = self.session_id)
+
+            #tell simulator to unregister
+            self.unregister(reason)
+
+        except Exception as err:
+            log.info("An error occured while trying to delete session {}".format(err))
+
+
+def handle_SIGTERM(signalType: int, frame: FrameType, bonsaiConnector: BonsaiConnector) -> None:
+    """Unregisters the simulator when a SIGTERM signal is detected """
+    bonsaiConnector.unregister("Unregistering because SIGTERM signal")
+    sys.exit()
