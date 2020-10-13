@@ -5,9 +5,9 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/myned-ai/bonsai-connectors/blob/master/LICENSE)
 
 
-![Alt Text](assets/cart_pole.gif)|![Alt Text](assets/mountain_car.gif)|![Alt Text](assets/hoppers.gif)  
+![Alt Text](assets/cart_pole.gif)|![Alt Text](assets/mountain_car.gif)|![Alt Text](assets/pendulum.gif)  
 :-------------------------------:|:----------------------------------:|:-------------------------------:
-![Alt Text](assets/pendulum.gif) |![Alt Text](assets/half_cheetah.gif)|![Alt Text](assets/reacher.gif)
+![Alt Text](assets/hoppers.gif) |![Alt Text](assets/half_cheetah.gif)|![Alt Text](assets/reacher.gif)
 
 
 Bonsai Connectors is an open-source library, which gives us access to OpenAI Gym standardised set of environments while using Microsoft's reinforcement learning platform Bonsai.
